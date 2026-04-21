@@ -37,6 +37,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/requests/my").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/requests/**").hasAuthority("ROLE_AGENT")
                 .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/requests/**").hasAuthority("ROLE_AGENT")
