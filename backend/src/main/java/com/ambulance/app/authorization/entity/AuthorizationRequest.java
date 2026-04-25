@@ -1,4 +1,4 @@
-package com.ambulance.app.legalisation.entity;
+package com.ambulance.app.authorization.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,38 +8,41 @@ import com.ambulance.app.user.entity.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "legalisation_requests")
+@Table(name = "authorization_requests")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LegalisationRequest {
+public class AuthorizationRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String documentType; // e.g. "SIGNATURE", "TRUE_COPY"
-    
+    private String authorizationType; // "ELECTRICITY" or "WATER"
+
     private String clientName;
     private String clientPhone;
     private String cin;
-    
+
+    @Column(columnDefinition = "TEXT")
+    private String nationalIdCardProof;
+
+    @Column(columnDefinition = "TEXT")
+    private String constructionPermitProof;
+
+    @Column(columnDefinition = "TEXT")
+    private String habitationPermitProof;
+
+    @Column(columnDefinition = "TEXT")
+    private String stabilityCertificateProof;
+
+    @Column(columnDefinition = "TEXT")
+    private String commissionNoticeProof;
+
     @Column(nullable = false)
-    private String appointmentDate;
-
-    @Column(columnDefinition = "TEXT")
-    private String documentProof; 
-
-    @Column(columnDefinition = "TEXT")
-    private String originalDocumentProof; // For true copy
-
-    @Column(columnDefinition = "TEXT")
-    private String identityProof; // e.g. ID card, passport for signature
-
-    @Column(nullable = false)
-    private String status; // PENDING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
+    private String status; // PENDING, ACCEPTED, CANCELLED
 
     private LocalDateTime requestTime;
 
