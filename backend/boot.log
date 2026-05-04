@@ -1,0 +1,1140 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.ambulance:ambulance-backend >-------------------
+[INFO] Building ambulance-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.4:run (default-cli) > test-compile @ ambulance-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ambulance-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ ambulance-backend ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 20 source files with javac [debug release 21] to target\classes
+[INFO] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ambulance-backend ---
+[INFO] skip non existing resourceDirectory C:\Users\farou\Desktop\projects\ambulance\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ ambulance-backend ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot:3.2.4:run (default-cli) < test-compile @ ambulance-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.4:run (default-cli) @ ambulance-backend ---
+[INFO] Attaching agents: []
+2026-04-15T13:10:42.105+01:00  INFO 8012 --- [ambulance-backend] [           main] com.ambulance.app.AmbulanceApplication   : Starting AmbulanceApplication using Java 21.0.10 with PID 8012 (C:\Users\farou\Desktop\projects\ambulance\backend\target\classes started by farou in C:\Users\farou\Desktop\projects\ambulance\backend)
+2026-04-15T13:10:42.122+01:00  INFO 8012 --- [ambulance-backend] [           main] com.ambulance.app.AmbulanceApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-15T13:10:44.610+01:00  INFO 8012 --- [ambulance-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-15T13:10:44.884+01:00  INFO 8012 --- [ambulance-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 251 ms. Found 3 JPA repository interfaces.
+2026-04-15T13:10:47.301+01:00  INFO 8012 --- [ambulance-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-15T13:10:47.338+01:00  INFO 8012 --- [ambulance-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-15T13:10:47.339+01:00  INFO 8012 --- [ambulance-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-04-15T13:10:47.544+01:00  INFO 8012 --- [ambulance-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-15T13:10:47.547+01:00  INFO 8012 --- [ambulance-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5312 ms
+2026-04-15T13:10:48.207+01:00  INFO 8012 --- [ambulance-backend] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-15T13:10:48.391+01:00  INFO 8012 --- [ambulance-backend] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-04-15T13:10:48.495+01:00  INFO 8012 --- [ambulance-backend] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-15T13:10:49.373+01:00  INFO 8012 --- [ambulance-backend] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-15T13:10:49.449+01:00  INFO 8012 --- [ambulance-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-15T13:10:49.742+01:00  INFO 8012 --- [ambulance-backend] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@33bdd01
+2026-04-15T13:10:49.754+01:00  INFO 8012 --- [ambulance-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-15T13:10:53.377+01:00  INFO 8012 --- [ambulance-backend] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    create table users (
+        id bigserial not null,
+        age integer not null,
+        cin varchar(255) not null,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        password varchar(255) not null,
+        role varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    alter table if exists users 
+       drop constraint if exists UK_6dotkott2kjsp8vw4d0m25fb7
+2026-04-15T13:10:53.603+01:00  WARN 8012 --- [ambulance-backend] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-15T13:10:53.603+01:00  WARN 8012 --- [ambulance-backend] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk_6dotkott2kjsp8vw4d0m25fb7" of relation "users" does not exist, skipping
+Hibernate: 
+    alter table if exists users 
+       add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email)
+2026-04-15T13:10:53.741+01:00  INFO 8012 --- [ambulance-backend] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-15T13:10:55.017+01:00 TRACE 8012 --- [ambulance-backend] [           main] eGlobalAuthenticationAutowiredConfigurer : Eagerly initializing {securityConfig=com.ambulance.app.config.SecurityConfig$$SpringCGLIB$$0@737445ab}
+2026-04-15T13:10:55.573+01:00  WARN 8012 --- [ambulance-backend] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-15T13:10:56.519+01:00  INFO 8012 --- [ambulance-backend] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]
+2026-04-15T13:10:57.181+01:00  INFO 8012 --- [ambulance-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-04-15T13:10:57.198+01:00  INFO 8012 --- [ambulance-backend] [           main] com.ambulance.app.AmbulanceApplication   : Started AmbulanceApplication in 16.653 seconds (process running for 18.66)
+2026-04-15T13:13:23.929+01:00  INFO 8012 --- [ambulance-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-15T13:13:23.958+01:00  INFO 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-15T13:13:23.960+01:00  INFO 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-04-15T13:13:23.988+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:13:23.991+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/register
+2026-04-15T13:13:23.991+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:13:23.993+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:13:23.999+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:13:24.001+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:13:24.004+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:13:24.005+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:13:24.007+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:13:24.008+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:13:24.008+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:13:24.010+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:13:24.012+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:13:24.014+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:13:24.015+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+2026-04-15T13:13:24.017+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-15T13:13:24.017+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:13:24.018+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:13:24.019+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@2d7bb8d0]
+2026-04-15T13:13:24.020+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@2d7bb8d0] using org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer$$Lambda/0x0000026434847798@5793431d
+2026-04-15T13:13:24.022+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/register
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    insert 
+    into
+        users
+        (age, cin, email, name, password, role) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-04-15T13:13:25.516+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:15:27.430+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:15:27.431+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/auth/login
+2026-04-15T13:15:27.434+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:15:27.434+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:15:27.436+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:15:27.436+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:15:27.436+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:15:27.454+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:15:27.465+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:15:27.469+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/login
+2026-04-15T13:15:27.470+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:15:27.470+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:15:27.470+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:15:27.476+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:15:27.476+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:15:27.481+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:15:27.481+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:15:27.481+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:15:27.483+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:15:27.484+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:15:27.485+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:15:27.485+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:15:27.485+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+2026-04-15T13:15:27.485+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-15T13:15:27.487+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:15:27.487+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:15:27.487+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@7c304346]
+2026-04-15T13:15:27.487+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@7c304346] using org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer$$Lambda/0x0000026434847798@5793431d
+2026-04-15T13:15:27.487+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/login
+2026-04-15T13:15:27.495+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.authentication.ProviderManager     : Authenticating request with DaoAuthenticationProvider (1/1)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:15:28.240+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:15:28.252+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:18:56.469+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:18:56.483+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/auth/register
+2026-04-15T13:18:56.484+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:18:56.485+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:18:56.485+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:18:56.486+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:18:56.487+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:18:56.489+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:18:56.495+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:18:56.497+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/register
+2026-04-15T13:18:56.502+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:18:56.504+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:18:56.504+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:18:56.505+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:18:56.506+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:18:56.507+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:18:56.508+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:18:56.508+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:18:56.509+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:18:56.509+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:18:56.510+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:18:56.511+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:18:56.511+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+2026-04-15T13:18:56.511+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-15T13:18:56.511+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:18:56.511+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:18:56.513+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@3eac4c1]
+2026-04-15T13:18:56.513+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@3eac4c1] using org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer$$Lambda/0x0000026434847798@5793431d
+2026-04-15T13:18:56.514+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/register
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    insert 
+    into
+        users
+        (age, cin, email, name, password, role) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2026-04-15T13:18:56.843+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:21:11.850+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:21:11.853+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:21:11.855+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:21:11.856+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:21:11.856+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:21:11.856+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:21:11.858+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:21:11.862+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:21:11.871+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:21:11.876+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing POST /api/requests
+2026-04-15T13:21:11.877+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:21:11.878+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:21:11.880+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:21:11.880+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:21:11.881+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:21:11.883+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:21:11.885+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:21:11.885+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:21:12.172+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:21:12.347+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:21:12.349+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:21:12.350+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:21:12.351+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:21:12.359+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=2, email=faroukbichou1@gmail.com, name=harry, age=20, cin=gn252272, password=$2a$10$gYt0jVNpR2tOmQsIGsSkMuOpjDO77svYmRgdzgMuCfljdYOiNwzvK, role=ROLE_USER), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_USER]]
+2026-04-15T13:21:12.367+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:21:12.371+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:21:12.373+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:21:12.374+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@6a6fd70f]
+2026-04-15T13:21:12.374+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@6a6fd70f] using org.springframework.security.authorization.AuthenticatedAuthorizationManager@262402c6
+2026-04-15T13:21:12.376+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured POST /api/requests
+Hibernate: 
+    insert 
+    into
+        ambulance_requests
+        (client_name, client_phone, destination, document_proof, gps_location, pickup_location, request_time, scheduled_date, status, vehicle_id, vehicle_type) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-04-15T13:21:12.540+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:10.773+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:10.788+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/auth/login
+2026-04-15T13:22:10.789+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:10.789+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:10.790+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:10.791+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:10.791+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:10.792+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:10.797+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:10.804+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/login
+2026-04-15T13:22:10.805+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:10.805+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:10.806+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:10.806+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:10.806+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:10.808+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:22:10.808+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:22:10.809+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:22:10.809+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:22:10.809+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:22:10.810+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:22:10.810+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:22:10.810+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+2026-04-15T13:22:10.810+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-15T13:22:10.811+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:22:10.811+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:22:10.812+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@7657b64e]
+2026-04-15T13:22:10.812+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@7657b64e] using org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer$$Lambda/0x0000026434847798@5793431d
+2026-04-15T13:22:10.813+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/login
+2026-04-15T13:22:10.815+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.authentication.ProviderManager     : Authenticating request with DaoAuthenticationProvider (1/1)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:11.166+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:11.197+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:20.841+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:20.856+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:22:20.857+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:20.857+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:20.857+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:20.857+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:20.857+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:20.859+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:20.843+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:20.862+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:22:20.862+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:20.862+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:20.863+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:20.863+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:20.863+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:20.865+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:20.876+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:20.881+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:22:20.881+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:20.881+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:20.883+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:20.883+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:20.883+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:20.885+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:22:20.886+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:22:20.886+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:22:20.888+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:20.904+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:22:20.906+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:22:20.908+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:22:20.908+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:22:20.909+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:22:20.909+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:22:20.909+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:22:20.909+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:22:20.911+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@ab2c54]
+2026-04-15T13:22:20.911+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@ab2c54] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:22:20.911+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:22:20.972+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:20.987+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:20.989+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:22:20.989+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:20.989+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:20.991+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:20.991+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:20.991+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:20.993+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:22:20.993+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:22:20.993+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:22:20.994+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:21.008+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:22:21.008+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:22:21.010+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:22:21.012+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@3886beb4]
+2026-04-15T13:22:21.012+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@3886beb4] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:22:21.012+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:22:21.031+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:53.069+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:53.071+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests/7/status?status=ACCEPTED
+2026-04-15T13:22:53.073+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:53.073+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:53.074+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:53.075+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:53.075+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:53.076+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:53.082+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:53.083+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing PATCH /api/requests/7/status?status=ACCEPTED
+2026-04-15T13:22:53.083+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:53.083+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:53.084+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:53.085+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:53.085+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:53.086+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:22:53.088+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:22:53.089+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:22:53.090+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:53.117+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:22:53.119+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:22:53.119+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:22:53.119+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:22:53.119+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:22:53.119+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:22:53.121+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:22:53.121+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:22:53.121+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@1894e1aa]
+2026-04-15T13:22:53.121+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@1894e1aa] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:22:53.123+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured PATCH /api/requests/7/status?status=ACCEPTED
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0 
+    where
+        ar1_0.id=?
+Hibernate: 
+    update
+        ambulance_requests 
+    set
+        client_name=?,
+        client_phone=?,
+        destination=?,
+        document_proof=?,
+        gps_location=?,
+        pickup_location=?,
+        request_time=?,
+        scheduled_date=?,
+        status=?,
+        vehicle_id=?,
+        vehicle_type=? 
+    where
+        id=?
+2026-04-15T13:22:53.238+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:53.245+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:53.245+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:22:53.246+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:53.246+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:53.247+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:53.247+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:53.247+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:53.247+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:22:53.251+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:22:53.251+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:22:53.253+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:22:53.253+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:22:53.253+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:22:53.253+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:22:53.255+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:22:53.255+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:22:53.255+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:22:53.257+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:22:53.259+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:22:53.273+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:22:53.278+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:22:53.279+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:22:53.279+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:22:53.279+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:22:53.279+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:22:53.281+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:22:53.282+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:22:53.282+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@4a59e67c]
+2026-04-15T13:22:53.282+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@4a59e67c] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:22:53.282+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:22:53.294+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:28.120+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:28.121+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:28.124+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:23:28.124+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:23:28.124+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:28.124+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:28.124+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:28.124+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:28.124+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:28.126+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:28.126+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:28.127+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:28.130+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:28.126+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:28.133+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:28.134+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:28.139+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:28.140+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:23:28.140+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:28.142+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:28.142+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:28.142+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:28.144+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:28.145+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:23:28.146+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:23:28.146+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:23:28.149+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:23:28.189+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:23:28.192+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:23:28.192+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:23:28.194+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@77176dba]
+2026-04-15T13:23:28.196+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@77176dba] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:23:28.196+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:23:28.243+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:28.252+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:28.258+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:23:28.259+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:28.259+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:28.260+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:28.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:28.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:28.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:23:28.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:23:28.263+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:23:28.270+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:23:28.284+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:23:28.285+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:23:28.285+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:23:28.286+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:23:28.286+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:23:28.287+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:23:28.287+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:23:28.287+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:23:28.287+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@c4b9825]
+2026-04-15T13:23:28.288+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@c4b9825] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:23:28.288+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:23:28.317+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:57.728+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:57.742+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:23:57.744+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:57.745+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:57.746+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:57.746+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:57.747+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:57.749+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:23:57.759+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:23:57.760+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing POST /api/requests
+2026-04-15T13:23:57.761+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:23:57.761+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:23:57.763+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:23:57.763+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:23:57.763+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:23:57.765+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:23:57.767+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:23:57.767+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:23:57.769+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:23:57.797+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:23:57.797+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:23:57.797+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:23:57.797+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:23:57.797+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:23:57.800+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:23:57.800+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:23:57.800+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:23:57.802+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@626f90d8]
+2026-04-15T13:23:57.802+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@626f90d8] using org.springframework.security.authorization.AuthenticatedAuthorizationManager@262402c6
+2026-04-15T13:23:57.802+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured POST /api/requests
+Hibernate: 
+    insert 
+    into
+        ambulance_requests
+        (client_name, client_phone, destination, document_proof, gps_location, pickup_location, request_time, scheduled_date, status, vehicle_id, vehicle_type) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-04-15T13:23:57.890+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:01.198+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:01.200+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:24:01.203+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:01.203+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:01.204+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:01.204+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:01.204+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:01.204+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:01.206+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:01.207+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:01.209+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:01.226+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:01.229+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:01.229+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:01.229+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:01.229+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:01.230+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:01.231+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:01.231+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:01.232+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@163218f3]
+2026-04-15T13:24:01.232+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@163218f3] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:01.232+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:24:01.254+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-4] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:01.260+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:01.260+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:24:01.260+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:01.260+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:01.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:01.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:01.261+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:01.263+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:01.264+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:01.264+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:01.266+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:01.277+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:01.277+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:01.277+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:01.279+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:01.280+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:01.280+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:01.280+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:01.281+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:01.281+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@4612d4f9]
+2026-04-15T13:24:01.282+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@4612d4f9] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:01.282+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:24:01.299+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-5] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:49.609+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:49.630+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests/8/status?status=CANCELLED
+2026-04-15T13:24:49.630+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:49.633+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:49.633+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:49.634+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:49.634+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:49.636+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-8] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:49.639+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:49.640+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing PATCH /api/requests/8/status?status=CANCELLED
+2026-04-15T13:24:49.640+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:49.640+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:49.641+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:49.641+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:49.641+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:49.643+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:49.644+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:49.645+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:49.646+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:49.662+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:49.663+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:49.663+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:49.663+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:49.665+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:49.666+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:49.666+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:49.667+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:49.668+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@2864e415]
+2026-04-15T13:24:49.668+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@2864e415] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:49.669+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured PATCH /api/requests/8/status?status=CANCELLED
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0 
+    where
+        ar1_0.id=?
+Hibernate: 
+    update
+        ambulance_requests 
+    set
+        client_name=?,
+        client_phone=?,
+        destination=?,
+        document_proof=?,
+        gps_location=?,
+        pickup_location=?,
+        request_time=?,
+        scheduled_date=?,
+        status=?,
+        vehicle_id=?,
+        vehicle_type=? 
+    where
+        id=?
+2026-04-15T13:24:49.734+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-2] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:49.740+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:49.740+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:24:49.740+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:49.740+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:49.740+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:49.743+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:49.743+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:49.743+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-9] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:49.748+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:49.749+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:24:49.750+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:49.750+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:49.750+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:49.751+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:49.751+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:49.752+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:49.752+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:49.752+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:49.754+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:49.762+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:49.763+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:49.765+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:49.765+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@52c64eed]
+2026-04-15T13:24:49.765+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@52c64eed] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:49.766+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:24:49.788+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-1] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:55.617+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:55.622+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests/8
+2026-04-15T13:24:55.622+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:55.624+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:55.624+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:55.624+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:55.626+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:55.626+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-3] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:55.631+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:55.632+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing DELETE /api/requests/8
+2026-04-15T13:24:55.632+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:55.632+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:55.633+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:55.635+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:55.635+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:55.637+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:55.637+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:55.637+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:55.640+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:55.649+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:55.650+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:55.652+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:55.652+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:55.653+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:55.654+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:55.654+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:55.654+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:55.654+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@31774121]
+2026-04-15T13:24:55.655+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@31774121] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:55.655+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured DELETE /api/requests/8
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0 
+    where
+        ar1_0.id=?
+Hibernate: 
+    delete 
+    from
+        ambulance_requests 
+    where
+        id=?
+2026-04-15T13:24:55.731+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-6] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:55.741+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:55.742+01:00 DEBUG 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/requests
+2026-04-15T13:24:55.742+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:55.742+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:55.742+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:55.744+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:55.744+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:55.745+01:00 TRACE 8012 --- [ambulance-backend] [nio-8080-exec-7] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
+2026-04-15T13:24:55.748+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Trying to match request against DefaultSecurityFilterChain [RequestMatcher=any request, Filters=[org.springframework.security.web.session.DisableEncodeUrlFilter@527d1fe1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24fb752f, org.springframework.security.web.context.SecurityContextHolderFilter@739be7ec, org.springframework.security.web.header.HeaderWriterFilter@118f2486, org.springframework.web.filter.CorsFilter@68dbe225, org.springframework.security.web.authentication.logout.LogoutFilter@3d763ae5, com.ambulance.app.config.JwtAuthenticationFilter@46b55a0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d568f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c7aba7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@145ef9e8, org.springframework.security.web.session.SessionManagementFilter@2a0881f1, org.springframework.security.web.access.ExceptionTranslationFilter@5a079446, org.springframework.security.web.access.intercept.AuthorizationFilter@52b49891]] (1/1)
+2026-04-15T13:24:55.749+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/requests
+2026-04-15T13:24:55.752+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking DisableEncodeUrlFilter (1/13)
+2026-04-15T13:24:55.752+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking WebAsyncManagerIntegrationFilter (2/13)
+2026-04-15T13:24:55.753+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderFilter (3/13)
+2026-04-15T13:24:55.753+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking HeaderWriterFilter (4/13)
+2026-04-15T13:24:55.753+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking CorsFilter (5/13)
+2026-04-15T13:24:55.754+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking LogoutFilter (6/13)
+2026-04-15T13:24:55.754+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.logout.LogoutFilter            : Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-15T13:24:55.754+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking JwtAuthenticationFilter (7/13)
+2026-04-15T13:24:55.756+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] .s.s.w.c.SupplierDeferredSecurityContext : Created SecurityContextImpl [Null authentication]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age,
+        u1_0.cin,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-15T13:24:55.775+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking RequestCacheAwareFilter (8/13)
+2026-04-15T13:24:55.776+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SecurityContextHolderAwareRequestFilter (9/13)
+2026-04-15T13:24:55.776+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AnonymousAuthenticationFilter (10/13)
+2026-04-15T13:24:55.777+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking SessionManagementFilter (11/13)
+2026-04-15T13:24:55.777+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=User(id=1, email=agent@nwirat.gov.ma, name=Official Agent, age=35, cin=AGENT-001, password=$2a$10$cwPmzhONZUTFDf7h03iPqOXO3aBxDuthOtoBgSZ/ICP7G9HAiUraK, role=ROLE_AGENT), Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_AGENT]]
+2026-04-15T13:24:55.778+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] s.CompositeSessionAuthenticationStrategy : Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-15T13:24:55.778+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking ExceptionTranslationFilter (12/13)
+2026-04-15T13:24:55.779+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Invoking AuthorizationFilter (13/13)
+2026-04-15T13:24:55.779+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Authorizing SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@78a6c5fa]
+2026-04-15T13:24:55.779+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] estMatcherDelegatingAuthorizationManager : Checking authorization on SecurityContextHolderAwareRequestWrapper[ org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@78a6c5fa] using AuthorityAuthorizationManager[authorities=[ROLE_AGENT]]
+2026-04-15T13:24:55.781+01:00 DEBUG 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/requests
+Hibernate: 
+    select
+        ar1_0.id,
+        ar1_0.client_name,
+        ar1_0.client_phone,
+        ar1_0.destination,
+        ar1_0.document_proof,
+        ar1_0.gps_location,
+        ar1_0.pickup_location,
+        ar1_0.request_time,
+        ar1_0.scheduled_date,
+        ar1_0.status,
+        ar1_0.vehicle_id,
+        ar1_0.vehicle_type 
+    from
+        ambulance_requests ar1_0
+2026-04-15T13:24:55.803+01:00 TRACE 8012 --- [ambulance-backend] [io-8080-exec-10] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match request to [Is Secure]
