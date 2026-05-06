@@ -5,6 +5,8 @@ import axios from 'axios';
 export default function StaffDashboard() {
   const [recentRequests, setRecentRequests] = useState<any[]>([]);
   const [filterStatus, setFilterStatus] = useState('ALL');
+  const [filterType, setFilterType] = useState('ALL');
+  const [sortTime, setSortTime] = useState('DESC');
   const [statsData, setStatsData] = useState({ total: 0, pending: 0, resolved: 0, activeStaff: 5 });
 
   // Modals state
@@ -15,9 +17,10 @@ export default function StaffDashboard() {
   const fetchAllRequests = async () => {
     try {
       const token = localStorage.getItem('token');
-      const [vehiclesRes, authsRes] = await Promise.all([
+      const [vehiclesRes, authsRes, legalsRes] = await Promise.all([
         axios.get('http://localhost:8080/api/requests', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:8080/api/authorizations', { headers: { Authorization: `Bearer ${token}` } })
+        axios.get('http://localhost:8080/api/authorizations', { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get('http://localhost:8080/api/legalisation', { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       const mappedVehicles = vehiclesRes.data.map((r: any) => ({
@@ -28,6 +31,7 @@ export default function StaffDashboard() {
         type: r.vehicleType === 'ambulance' ? 'Ambulance' : 'Véhicule Funéraire',
         status: r.status || 'PENDING',
         time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
         documentProof: r.documentProof
       }));
 
@@ -39,12 +43,24 @@ export default function StaffDashboard() {
         type: r.authorizationType === 'WATER' ? 'Eau Potable' : 'Électricité',
         status: r.status || 'PENDING',
         time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
         // Assuming authorization proof could be one of the files, we'll just take nationalId for demo if not unified
         documentProof: r.nationalIdCardProof || r.documentProof
       }));
 
-      const all = [...mappedVehicles, ...mappedAuths];
-      all.sort((a, b) => b.id.localeCompare(a.id));
+      const mappedLegals = legalsRes.data.map((r: any) => ({
+        id: `LEG-${r.id}`,
+        realId: r.id,
+        rawType: 'LEG',
+        user: r.clientName,
+        type: r.documentType === 'SIGNATURE' ? 'Légalisation de Signature' : 'Copie Conforme',
+        status: r.status || 'PENDING',
+        time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+        documentProof: r.documentProof || r.originalDocumentProof || r.identityProof
+      }));
+
+      const all = [...mappedVehicles, ...mappedAuths, ...mappedLegals];
       
       const pending = all.filter(r => r.status === 'PENDING').length;
       const resolved = all.filter(r => r.status === 'COMPLETED' || r.status === 'ACCEPTED').length;
@@ -63,7 +79,7 @@ export default function StaffDashboard() {
   const handleAccept = async (id: number, type: string) => {
     try {
       const token = localStorage.getItem('token');
-      const endpoint = type === 'VEH' ? `/api/requests/${id}/status` : `/api/authorizations/${id}/status`;
+      const endpoint = type === 'VEH' ? `/api/requests/${id}/status` : type === 'AUT' ? `/api/authorizations/${id}/status` : `/api/legalisation/${id}/status`;
       await axios.patch(`http://localhost:8080${endpoint}?status=ACCEPTED`, null, { headers: { Authorization: `Bearer ${token}` }});
       fetchAllRequests();
     } catch (err) {
@@ -74,7 +90,7 @@ export default function StaffDashboard() {
   const submitReject = async () => {
     try {
       const token = localStorage.getItem('token');
-      const endpoint = rejectModal.type === 'VEH' ? `/api/requests/${rejectModal.requestId}/status` : `/api/authorizations/${rejectModal.requestId}/status`;
+      const endpoint = rejectModal.type === 'VEH' ? `/api/requests/${rejectModal.requestId}/status` : rejectModal.type === 'AUT' ? `/api/authorizations/${rejectModal.requestId}/status` : `/api/legalisation/${rejectModal.requestId}/status`;
       await axios.patch(`http://localhost:8080${endpoint}?status=REJECTED&reason=${encodeURIComponent(rejectReason)}`, null, { headers: { Authorization: `Bearer ${token}` }});
       setRejectModal({ open: false, requestId: '', type: 'VEH' });
       setRejectReason('');
@@ -88,7 +104,7 @@ export default function StaffDashboard() {
     if(!window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) return;
     try {
       const token = localStorage.getItem('token');
-      const endpoint = type === 'VEH' ? `/api/requests/${id}` : `/api/authorizations/${id}`;
+      const endpoint = type === 'VEH' ? `/api/requests/${id}` : type === 'AUT' ? `/api/authorizations/${id}` : `/api/legalisation/${id}`;
       await axios.delete(`http://localhost:8080${endpoint}`, { headers: { Authorization: `Bearer ${token}` }});
       fetchAllRequests();
     } catch (err) {
@@ -103,11 +119,32 @@ export default function StaffDashboard() {
     { label: 'En Attente', value: statsData.pending.toString(), icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-100', border: 'border-red-200' },
   ];
 
-  const filteredRequests = recentRequests.filter(req => {
-    if (filterStatus === 'ALL') return true;
-    if (filterStatus === 'REJECTED') return req.status === 'REJECTED' || req.status === 'CANCELLED';
-    return req.status === filterStatus;
+  let filteredRequests = recentRequests.filter(req => {
+    if (filterStatus !== 'ALL') {
+      if (filterStatus === 'REJECTED') {
+        if (req.status !== 'REJECTED' && req.status !== 'CANCELLED' && req.status !== 'REFUSED') return false;
+      } else if (req.status !== filterStatus) return false;
+    }
+    if (filterType !== 'ALL') {
+      if (req.type !== filterType) return false;
+    }
+    return true;
   });
+
+  filteredRequests.sort((a, b) => {
+    if (sortTime === 'DESC') return b.timestamp - a.timestamp;
+    return a.timestamp - b.timestamp;
+  });
+
+  const translateStatus = (status: string) => {
+    if (status === 'PENDING') return 'En Attente';
+    if (status === 'ACCEPTED') return 'Acceptée';
+    if (status === 'REJECTED' || status === 'REFUSED') return 'Rejetée';
+    if (status === 'COMPLETED') return 'Terminée';
+    if (status === 'CANCELLED') return 'Annulée';
+    if (status === 'IN_PROGRESS') return 'En Cours';
+    return status;
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans">
@@ -140,17 +177,40 @@ export default function StaffDashboard() {
       <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[2.5rem] shadow-sm overflow-hidden">
         <div className="p-8 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-xl font-black text-[#0f172a]">Demandes Citoyennes Récentes</h3>
-          <select 
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm font-bold text-[#0f172a] focus:ring-2 focus:ring-[#0f172a] outline-none"
-          >
-            <option value="ALL">Tous les statuts</option>
-            <option value="PENDING">En Attente</option>
-            <option value="ACCEPTED">Acceptée</option>
-            <option value="REJECTED">Rejetée / Annulée</option>
-            <option value="COMPLETED">Terminée</option>
-          </select>
+          <div className="flex gap-4">
+            <select 
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="px-4 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm font-bold text-[#0f172a] focus:ring-2 focus:ring-[#0f172a] outline-none"
+            >
+              <option value="ALL">Tous les types</option>
+              <option value="Ambulance">Ambulance</option>
+              <option value="Véhicule Funéraire">Véhicule Funéraire</option>
+              <option value="Eau Potable">Eau Potable</option>
+              <option value="Électricité">Électricité</option>
+              <option value="Légalisation de Signature">Légalisation de Signature</option>
+              <option value="Copie Conforme">Copie Conforme</option>
+            </select>
+            <select 
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-4 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm font-bold text-[#0f172a] focus:ring-2 focus:ring-[#0f172a] outline-none"
+            >
+              <option value="ALL">Tous les statuts</option>
+              <option value="PENDING">En Attente</option>
+              <option value="ACCEPTED">Acceptée</option>
+              <option value="REJECTED">Rejetée / Annulée</option>
+              <option value="COMPLETED">Terminée</option>
+            </select>
+            <select 
+              value={sortTime}
+              onChange={(e) => setSortTime(e.target.value)}
+              className="px-4 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm font-bold text-[#0f172a] focus:ring-2 focus:ring-[#0f172a] outline-none"
+            >
+              <option value="DESC">Plus récents</option>
+              <option value="ASC">Plus anciens</option>
+            </select>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
@@ -173,13 +233,13 @@ export default function StaffDashboard() {
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border
                       ${req.status === 'ACCEPTED' || req.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
                         req.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
-                        req.status === 'REJECTED' || req.status === 'CANCELLED' ? 'bg-red-50 text-red-700 border-red-200' :
+                        req.status === 'REJECTED' || req.status === 'CANCELLED' || req.status === 'REFUSED' ? 'bg-red-50 text-red-700 border-red-200' :
                         'bg-amber-50 text-amber-700 border-amber-200'}`}>
                       {req.status === 'ACCEPTED' || req.status === 'COMPLETED' ? <CheckCircle2 className="w-4 h-4 mr-1.5" /> : 
-                        req.status === 'REJECTED' || req.status === 'CANCELLED' ? <XCircle className="w-4 h-4 mr-1.5" /> : 
+                        req.status === 'REJECTED' || req.status === 'CANCELLED' || req.status === 'REFUSED' ? <XCircle className="w-4 h-4 mr-1.5" /> : 
                         req.status === 'IN_PROGRESS' ? <Activity className="w-4 h-4 mr-1.5" /> : 
                         <Clock className="w-4 h-4 mr-1.5" />}
-                      {req.status}
+                      {translateStatus(req.status)}
                     </span>
                   </td>
                   <td className="px-8 py-5 flex items-center justify-center gap-2">

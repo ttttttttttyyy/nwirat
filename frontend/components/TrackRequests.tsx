@@ -11,12 +11,15 @@ export default function TrackRequests() {
       try {
         const token = localStorage.getItem('token');
         
-        // Fetch both vehicle requests and authorizations
-        const [vehiclesRes, authsRes] = await Promise.all([
+        // Fetch vehicle requests, authorizations, and legalisations
+        const [vehiclesRes, authsRes, legalisationsRes] = await Promise.all([
           axios.get('http://localhost:8080/api/requests/my', {
             headers: { Authorization: `Bearer ${token}` }
           }),
           axios.get('http://localhost:8080/api/authorizations/my', {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get('http://localhost:8080/api/legalisation/my', {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);
@@ -35,7 +38,14 @@ export default function TrackRequests() {
           status: r.status || 'PENDING'
         }));
 
-        const allRequests = [...mappedVehicles, ...mappedAuths];
+        const mappedLegalisations = legalisationsRes.data.map((r: any) => ({
+          id: `LEG-${r.id}`,
+          type: r.documentType === 'SIGNATURE' ? 'Légalisation de Signature' : 'Copie Conforme',
+          date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          status: r.status || 'PENDING'
+        }));
+
+        const allRequests = [...mappedVehicles, ...mappedAuths, ...mappedLegalisations];
         // Sort newest first roughly based on ID since we don't have perfect timestamps easily comparable here
         allRequests.sort((a, b) => b.id.localeCompare(a.id));
 
@@ -60,6 +70,8 @@ export default function TrackRequests() {
       case 'ACCEPTED': return <CheckCircle className="w-5 h-5 text-emerald-500" />;
       case 'COMPLETED': return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'CANCELLED': return <XCircle className="w-5 h-5 text-red-500" />;
+      case 'REJECTED': return <XCircle className="w-5 h-5 text-red-500" />;
+      case 'REFUSED': return <XCircle className="w-5 h-5 text-red-500" />;
       default: return <AlertCircle className="w-5 h-5 text-gray-500" />;
     }
   };
@@ -70,6 +82,8 @@ export default function TrackRequests() {
       case 'ACCEPTED': return <span className="px-3 py-1 bg-emerald-50 text-[#064e3b] border border-emerald-200 rounded-full text-xs font-semibold">Acceptée</span>;
       case 'COMPLETED': return <span className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-semibold">Terminée</span>;
       case 'CANCELLED': return <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-semibold">Annulée</span>;
+      case 'REJECTED': return <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-semibold">Rejetée</span>;
+      case 'REFUSED': return <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-semibold">Refusée</span>;
       default: return <span className="px-3 py-1 bg-gray-50 text-gray-700 border border-gray-200 rounded-full text-xs font-semibold">Inconnu</span>;
     }
   };
