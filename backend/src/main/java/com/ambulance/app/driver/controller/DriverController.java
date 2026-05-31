@@ -2,6 +2,7 @@ package com.ambulance.app.driver.controller;
 
 import com.ambulance.app.driver.entity.Driver;
 import com.ambulance.app.driver.repository.DriverRepository;
+import com.ambulance.app.request.service.AmbulanceRequestService;
 import com.ambulance.app.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ public class DriverController {
 
     private final DriverRepository driverRepository;
     private final UserRepository userRepository;
+    private final AmbulanceRequestService requestService;
 
     @GetMapping
     public ResponseEntity<List<Driver>> getDrivers() {
+        requestService.refreshTodayAvailability();
         return ResponseEntity.ok(driverRepository.findAll());
     }
 

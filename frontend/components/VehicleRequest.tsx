@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Truck, MapPin, Navigation, Calendar, Upload, CheckCircle, HeartPulse, ShieldAlert, ArrowLeft } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Ambulance, CalendarDays, Check, CheckCircle, FileBadge2, FileCheck2, HeartPulse, IdCard, MapPin, Navigation, Phone, Route, ShieldAlert, Upload, UserRound } from 'lucide-react';
 import axios from 'axios';
 
 const SERVICE_AREAS = [
@@ -21,8 +21,6 @@ const MEDICAL_REASONS = [
 const FREE_MEDICAL_REASONS = new Set(['accident', 'giving_birth', 'mental_issues', 'long_term_sickness']);
 
 export default function VehicleRequest() {
-  const [step, setStep] = useState<1 | 2>(1);
-
   const [formData, setFormData] = useState({
     clientName: '',
     clientPhone: '',
@@ -42,6 +40,29 @@ export default function VehicleRequest() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const isAmbulance = formData.vehicleType === 'ambulance';
+  const isFuneral = formData.vehicleType === 'funeral';
+  const selectedArea = SERVICE_AREAS.find((area) => area.value === formData.serviceArea);
+  const selectedReason = MEDICAL_REASONS.find((reason) => reason.value === formData.medicalReason);
+  const documentLabel = isAmbulance ? 'Certificat medical' : 'Certificat de deces';
+  const accent = isAmbulance ? '#b91c1c' : '#334155';
+  const softAccent = isAmbulance ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-700';
+
+  const requiredDocuments = useMemo(() => {
+    if (!formData.vehicleType) return [];
+    return [
+      {
+        fieldName: 'documentProof',
+        inputId: 'vehicleDocumentProof',
+        title: documentLabel,
+        hint: isAmbulance ? 'Document medical obligatoire pour confirmer la demande.' : 'Document obligatoire pour le transport funeraire.'
+      }
+    ];
+  }, [documentLabel, formData.vehicleType, isAmbulance]);
+
+  const completedDocuments = formData.documentProof ? 1 : 0;
+  const progressPercent = requiredDocuments.length ? Math.round((completedDocuments / requiredDocuments.length) * 100) : 0;
 
   const calculateFee = (serviceArea: string, medicalReason: string) => {
     if (FREE_MEDICAL_REASONS.has(medicalReason)) {
@@ -68,6 +89,19 @@ export default function VehicleRequest() {
     setFormData(nextFormData);
   };
 
+  const handleVehicleTypeChange = (type: string) => {
+    setFormData({
+      ...formData,
+      vehicleType: type,
+      serviceArea: type === 'ambulance' ? formData.serviceArea : '',
+      medicalReason: type === 'ambulance' ? formData.medicalReason : '',
+      feeAmount: type === 'ambulance' ? formData.feeAmount : 0,
+      feeReason: type === 'ambulance' ? formData.feeReason : '',
+      documentProof: ''
+    });
+    setError('');
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -81,19 +115,22 @@ export default function VehicleRequest() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError('');
-    
+
+    if (!formData.vehicleType) {
+      setError('Veuillez choisir le type de vehicule avant de continuer.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
       const token = localStorage.getItem('token');
       await axios.post('http://localhost:8080/api/requests', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        setStep(1);
-      }, 3000);
+      setTimeout(() => setSuccess(false), 3000);
       setFormData({
         clientName: '', clientPhone: '', clientCin: '', pickupLocation: '',
         destination: '', vehicleType: '', serviceArea: '', medicalReason: '',
@@ -101,22 +138,10 @@ export default function VehicleRequest() {
         scheduledDate: '', documentProof: ''
       });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez réessayer.');
+      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez reessayer.');
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const selectVehicleType = (type: string) => {
-    setFormData({
-      ...formData,
-      vehicleType: type,
-      serviceArea: type === 'ambulance' ? formData.serviceArea : '',
-      medicalReason: type === 'ambulance' ? formData.medicalReason : '',
-      feeAmount: type === 'ambulance' ? formData.feeAmount : 0,
-      feeReason: type === 'ambulance' ? formData.feeReason : ''
-    });
-    setStep(2);
   };
 
   const getLocation = () => {
@@ -128,260 +153,326 @@ export default function VehicleRequest() {
             gpsLocation: `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`
           });
         },
-        (error) => {
-          setError("Impossible de récupérer la position GPS. Assurez-vous d'avoir autorisé l'accès à la localisation.");
+        () => {
+          setError("Impossible de recuperer la position GPS. Assurez-vous d'avoir autorise l'acces a la localisation.");
         }
       );
     } else {
-      setError("La géolocalisation n'est pas supportée par votre navigateur.");
+      setError("La geolocalisation n'est pas supportee par votre navigateur.");
     }
   };
 
-  // Theme based on selection (transparent glass colors)
-  const isAmbulance = formData.vehicleType === 'ambulance';
-  const themeColor = isAmbulance ? 'red' : 'slate';
-  const primaryBg = isAmbulance ? 'bg-red-500/10 border-red-200' : 'bg-slate-500/10 border-slate-200';
-  const primaryHover = isAmbulance ? 'hover:bg-red-500/20' : 'hover:bg-slate-500/20';
-  const focusRing = isAmbulance ? 'focus:ring-red-400' : 'focus:ring-slate-400';
-  const textColor = isAmbulance ? 'text-red-600' : 'text-slate-600';
-  const headerText = isAmbulance ? 'text-red-700' : 'text-slate-800';
-  const lightBg = isAmbulance ? 'bg-red-50/50' : 'bg-slate-50/50';
-  const selectedArea = SERVICE_AREAS.find((area) => area.value === formData.serviceArea);
-  const selectedReason = MEDICAL_REASONS.find((reason) => reason.value === formData.medicalReason);
+  const uploadBox = ({ fieldName, inputId, title, hint }: { fieldName: string; inputId: string; title: string; hint: string }) => {
+    const isAttached = Boolean((formData as any)[fieldName]);
 
-  if (step === 1) {
     return (
-      <div className="max-w-5xl mx-auto space-y-10 font-sans animate-fade-in-up">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-[#064e3b] font-bold text-xs tracking-widest uppercase mb-4">
-            Assistance Commune
-          </span>
-          <h2 className="text-4xl font-black text-[#0f172a] mb-4">Demande de Véhicule</h2>
-          <p className="text-gray-500 text-lg">Sélectionnez le type de véhicule nécessaire pour votre situation. Nous sommes là pour vous accompagner.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Ambulance Card */}
-          <div 
-            onClick={() => selectVehicleType('ambulance')}
-            className="group cursor-pointer relative overflow-hidden bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[2.5rem] p-10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-red-50/50 hover:border-red-200"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-red-500/20 transition-colors duration-500 shadow-sm border border-red-100">
-              <HeartPulse className="w-10 h-10 text-red-600 group-hover:text-red-700 transition-colors duration-500" />
-            </div>
-            <h3 className="text-3xl font-black text-[#0f172a] mb-4 group-hover:text-red-700 transition-colors">Ambulance</h3>
-            <p className="text-gray-600 text-lg mb-6 line-clamp-3">
-              Transport médicalisé d'urgence ou programmé vers les centres de soins et hôpitaux régionaux.
-            </p>
-            <div className="flex items-center text-sm font-bold text-red-600 bg-red-500/10 border border-red-100 w-fit px-4 py-2 rounded-full">
-              <ShieldAlert className="w-4 h-4 mr-2" />
-              Certificat Médical Requis
-            </div>
+      <label
+        key={fieldName}
+        htmlFor={inputId}
+        className={`group relative block cursor-pointer overflow-hidden rounded-2xl border p-5 transition-all ${
+          isAttached
+            ? 'border-[#991b1b] bg-[#991b1b] text-white shadow-lg shadow-red-950/10'
+            : 'border-gray-200 bg-white text-[#0f172a] shadow-sm hover:-translate-y-0.5 hover:border-[#991b1b] hover:shadow-lg'
+        }`}
+      >
+        <input id={inputId} name={inputId} type="file" className="sr-only" onChange={handleFileChange} required />
+        <div className="flex items-start justify-between gap-5">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isAttached ? 'bg-white/15' : 'bg-red-50 text-[#991b1b]'}`}>
+            {isAttached ? <Check className="w-5 h-5" /> : <Upload className="w-5 h-5" />}
           </div>
-
-          {/* Funeral Car Card */}
-          <div 
-            onClick={() => selectVehicleType('funeral')}
-            className="group cursor-pointer relative overflow-hidden bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[2.5rem] p-10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-slate-50/50 hover:border-slate-200"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-500/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="w-20 h-20 bg-slate-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-slate-500/20 transition-colors duration-500 shadow-sm border border-slate-100">
-              <MapPin className="w-10 h-10 text-slate-600 group-hover:text-slate-700 transition-colors duration-500" />
-            </div>
-            <h3 className="text-3xl font-black text-[#0f172a] mb-4 group-hover:text-slate-700 transition-colors">Véhicule Funéraire</h3>
-            <p className="text-gray-600 text-lg mb-6 line-clamp-3">
-              Transport respectueux et digne pour les services funéraires vers les cimetières de la commune.
+          <div className="min-w-0 flex-1">
+            <p className="font-black">{title}</p>
+            <p className={`mt-1 text-sm font-semibold leading-6 ${isAttached ? 'text-white/75' : 'text-gray-500'}`}>{hint}</p>
+            <p className={`mt-4 inline-flex rounded-full px-3 py-1 text-xs font-black uppercase tracking-wider ${isAttached ? 'bg-white/15 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-red-50 group-hover:text-[#991b1b]'}`}>
+              {isAttached ? 'Document ajoute' : 'Choisir un fichier'}
             </p>
-            <div className="flex items-center text-sm font-bold text-slate-600 bg-slate-500/10 border border-slate-100 w-fit px-4 py-2 rounded-full">
-              <ShieldAlert className="w-4 h-4 mr-2" />
-              Certificat de Décès Requis
-            </div>
           </div>
         </div>
-      </div>
+      </label>
     );
-  }
-
-  const documentLabel = isAmbulance ? 'Certificat Médical' : 'Certificat de Décès';
+  };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 font-sans animate-fade-in-up">
-      <button 
-        onClick={() => setStep(1)}
-        className="flex items-center text-gray-500 hover:text-[#0f172a] font-bold transition-colors mb-6"
-      >
-        <ArrowLeft className="w-5 h-5 mr-2" />
-        Retour à la sélection
-      </button>
+    <div className="mx-auto max-w-7xl animate-fade-in-up font-sans">
+      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+        <aside className="overflow-hidden rounded-[2rem] border border-[#991b1b]/10 bg-[#f8fafc] shadow-xl shadow-slate-900/5">
+          <div className="relative min-h-full bg-[#7f1d1d] p-7 text-white">
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.08))]" />
+            <div className="relative">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#991b1b] shadow-lg">
+                <Ambulance className="h-8 w-8" />
+              </div>
+              <p className="mt-8 text-xs font-black uppercase tracking-[0.24em] text-red-100">Assistance commune</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight">Demande de Vehicule</h2>
+              <p className="mt-4 text-sm font-semibold leading-7 text-red-50/80">
+                Un dossier clair pour demander une ambulance ou un vehicule funeraire, avec trajet, date et document obligatoire.
+              </p>
 
-      <div className={`p-8 rounded-[2rem] border ${primaryBg} backdrop-blur-xl shadow-sm relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-        <div className="relative z-10">
-          <h2 className={`text-3xl font-black mb-2 flex items-center gap-4 ${headerText}`}>
-            {isAmbulance ? <HeartPulse className="w-8 h-8" /> : <MapPin className="w-8 h-8" />}
-            Demande de {isAmbulance ? 'Ambulance' : 'Véhicule Funéraire'}
-          </h2>
-          <p className={`${textColor} opacity-90 text-lg font-medium`}>Veuillez remplir les informations du patient/défunt et les détails du transport.</p>
-        </div>
-      </div>
+              <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-black text-red-50">Document</span>
+                  <span className="text-sm font-black text-white">{completedDocuments}/{requiredDocuments.length || 1}</span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/15">
+                  <div className="h-full rounded-full bg-white transition-all" style={{ width: `${progressPercent}%` }} />
+                </div>
+                <p className="mt-3 text-xs font-bold text-red-50/75">
+                  {formData.vehicleType ? `${progressPercent}% du dossier complete` : 'Choisissez un type pour commencer'}
+                </p>
+              </div>
 
-      {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-3 text-green-700 shadow-sm animate-fade-in-up">
-          <CheckCircle className="w-6 h-6" />
-          <span className="font-bold">Demande de véhicule soumise avec succès !</span>
-        </div>
-      )}
-      
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-3 text-red-700 shadow-sm animate-fade-in-up">
-          <span className="font-bold">{error}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className={`bg-white/70 backdrop-blur-xl border border-gray-200 p-8 md:p-10 rounded-[2.5rem] shadow-sm space-y-8 relative overflow-hidden`}>
-        <div className={`absolute top-0 right-0 w-2 h-full ${isAmbulance ? 'bg-red-400' : 'bg-slate-400'}`}></div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Nom du Client</label>
-            <input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required
-              className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="Nom Complet" />
+              <div className="mt-6 space-y-3">
+                {['Choisir le vehicule', 'Preciser le trajet', 'Importer le document'].map((step, index) => (
+                  <div key={step} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-black text-[#991b1b]">{index + 1}</span>
+                    <span className="text-sm font-bold text-red-50">{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Numéro de Téléphone</label>
-            <input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required
-              className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="+212 6..." />
-          </div>
+        </aside>
 
-          {isAmbulance && (
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">CIN du Patient</label>
-              <input type="text" name="clientCin" value={formData.clientCin} onChange={handleChange} required
-                className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="AB123456" />
+        <section className="space-y-5">
+          {success && (
+            <div className="flex items-center gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-700 shadow-sm">
+              <CheckCircle className="h-6 w-6" />
+              <span className="font-bold">Demande de vehicule soumise avec succes !</span>
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Date et Heure Prévue</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Calendar className={`w-5 h-5 ${textColor}`} />
-              </div>
-              <input type="datetime-local" name="scheduledDate" value={formData.scheduledDate} onChange={handleChange} required
-                className={`w-full pl-12 pr-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} />
+          {error && (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm">
+              <span className="font-bold">{error}</span>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Lieu de Départ</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <MapPin className={`w-5 h-5 ${textColor}`} />
-              </div>
-              <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleChange} required
-                className={`w-full pl-12 pr-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="Adresse de départ" />
-            </div>
-          </div>
-          
-          {isAmbulance && (
-            <>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Destination autorisee</label>
-                <select name="serviceArea" value={formData.serviceArea} onChange={handleChange} required
-                  className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`}>
-                  <option value="">Choisir une destination</option>
-                  {SERVICE_AREAS.map((area) => (
-                    <option key={area.value} value={area.value}>{area.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Situation medicale</label>
-                <select name="medicalReason" value={formData.medicalReason} onChange={handleChange} required
-                  className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`}>
-                  <option value="">Choisir une situation</option>
-                  {MEDICAL_REASONS.map((reason) => (
-                    <option key={reason.value} value={reason.value}>{reason.label}</option>
-                  ))}
-                </select>
-              </div>
-            </>
           )}
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Destination</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Navigation className={`w-5 h-5 ${textColor}`} />
-              </div>
-              <input type="text" name="destination" value={formData.destination} onChange={handleChange} required
-                className={`w-full pl-12 pr-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder={isAmbulance ? "Hôpital / Clinique" : "Cimetière"} />
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Coordonnées GPS (Optionnel)</label>
-            <div className="flex gap-2">
-              <input type="text" name="gpsLocation" value={formData.gpsLocation} onChange={handleChange}
-                className={`flex-1 px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="36.8065, 10.1815" />
-              <button 
-                type="button" 
-                onClick={getLocation}
-                className={`px-4 py-3.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-2xl font-bold transition-colors flex items-center justify-center shrink-0 group shadow-sm`}
-                title="Obtenir ma position"
-              >
-                <MapPin className={`w-5 h-5 group-hover:${textColor} transition-colors`} />
-              </button>
-            </div>
-          </div>
-
-          {isAmbulance && (
-            <div className="md:col-span-2 rounded-2xl border border-red-100 bg-red-50/60 p-5">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <form onSubmit={handleSubmit} className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-xl shadow-slate-900/5">
+            <div className="border-b border-gray-100 bg-white p-5 md:p-7">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="text-sm font-black text-red-700 uppercase tracking-wider">Frais estimes</p>
-                  <p className="mt-1 text-sm font-medium text-red-700">
-                    {formData.serviceArea && formData.medicalReason
-                      ? `${selectedReason?.label} vers ${selectedArea?.label}`
-                      : 'Choisissez la destination et la situation medicale.'}
+                  <p className="text-sm font-black uppercase tracking-widest text-[#991b1b]">Type de service</p>
+                  <p className="mt-1 text-sm font-semibold text-gray-500">Selectionnez le vehicule necessaire pour votre demande.</p>
+                </div>
+                <div className="inline-flex rounded-2xl border border-gray-200 bg-gray-50 p-1">
+                  {[
+                    { value: 'ambulance', label: 'Ambulance', icon: HeartPulse },
+                    { value: 'funeral', label: 'Funeraire', icon: ShieldAlert }
+                  ].map((option) => {
+                    const Icon = option.icon;
+                    const active = formData.vehicleType === option.value;
+                    return (
+                      <label
+                        key={option.value}
+                        className={`inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition-all ${
+                          active ? 'bg-[#991b1b] text-white shadow-sm' : 'text-gray-500 hover:text-[#991b1b]'
+                        }`}
+                      >
+                        <input type="radio" name="vehicleType" value={option.value} className="sr-only" onChange={() => handleVehicleTypeChange(option.value)} checked={active} />
+                        <Icon className="h-4 w-4" />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {!formData.vehicleType ? (
+              <div className="p-6 md:p-10">
+                <div className="rounded-3xl border border-dashed border-[#991b1b]/20 bg-slate-50 p-8 text-center">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#991b1b] shadow-sm">
+                    <Route className="h-7 w-7" />
+                  </div>
+                  <p className="text-xl font-black text-[#0f172a]">Choisissez d'abord le type de vehicule</p>
+                  <p className="mx-auto mt-2 max-w-xl text-sm font-semibold leading-6 text-gray-500">
+                    Le formulaire de trajet et les documents requis apparaitront automatiquement apres votre selection.
                   </p>
-                  {formData.serviceArea === 'outside_region' && (
-                    <p className="mt-2 text-xs font-bold text-red-600">Disponible seulement si l&apos;hopital demande est dans un rayon de 300 km.</p>
-                  )}
                 </div>
-                <div className="text-3xl font-black text-red-700">{formData.feeAmount} DH</div>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="grid gap-0 xl:grid-cols-[1fr_300px]">
+                <div className="space-y-8 p-5 md:p-7">
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${softAccent}`}>
+                        <UserRound className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black text-[#0f172a]">Informations du demandeur</h3>
+                        <p className="text-sm font-semibold text-gray-500">Ces informations aideront l'equipe a traiter la mission.</p>
+                      </div>
+                    </div>
 
-          <div className="md:col-span-2">
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Document Requis : {documentLabel} <span className="text-red-500">*</span></label>
-            <div className={`mt-2 flex justify-center px-6 pt-8 pb-8 border-2 border-gray-200 border-dashed rounded-3xl hover:border-gray-300 transition-colors ${lightBg}`}>
-              <div className="space-y-2 text-center">
-                <Upload className={`mx-auto h-12 w-12 ${textColor}`} />
-                <div className="flex text-sm text-gray-600 justify-center">
-                  <label htmlFor="file-upload" className={`relative cursor-pointer rounded-md font-bold ${textColor} hover:underline focus-within:outline-none`}>
-                    <span>Télécharger le fichier</span>
-                    <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} required />
-                  </label>
-                  <p className="pl-1">ou glisser-déposer</p>
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Nom complet</label>
+                        <div className="relative">
+                          <UserRound className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: accent }} />
+                          <input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} placeholder="Nom complet" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Telephone</label>
+                        <div className="relative">
+                          <Phone className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: accent }} />
+                          <input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} placeholder="+212 6..." />
+                        </div>
+                      </div>
+                      {isAmbulance && (
+                        <div className="md:col-span-2">
+                          <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">CIN du patient</label>
+                          <div className="relative">
+                            <IdCard className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-red-700" />
+                            <input type="text" name="clientCin" value={formData.clientCin} onChange={handleChange} required
+                              className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-red-400" placeholder="AB123456" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${softAccent}`}>
+                        <Route className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black text-[#0f172a]">Trajet et mission</h3>
+                        <p className="text-sm font-semibold text-gray-500">Ajoutez le lieu de depart, la destination et la date prevue.</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Date et heure prevue</label>
+                        <div className="relative">
+                          <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: accent }} />
+                          <input type="datetime-local" name="scheduledDate" value={formData.scheduledDate} onChange={handleChange} required
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Lieu de depart</label>
+                        <div className="relative">
+                          <MapPin className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: accent }} />
+                          <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleChange} required
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} placeholder="Adresse de depart" />
+                        </div>
+                      </div>
+
+                      {isAmbulance && (
+                        <>
+                          <div>
+                            <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Destination autorisee</label>
+                            <select name="serviceArea" value={formData.serviceArea} onChange={handleChange} required
+                              className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-3.5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-red-400">
+                              <option value="">Choisir une destination</option>
+                              {SERVICE_AREAS.map((area) => (
+                                <option key={area.value} value={area.value}>{area.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Situation medicale</label>
+                            <select name="medicalReason" value={formData.medicalReason} onChange={handleChange} required
+                              className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-3.5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-red-400">
+                              <option value="">Choisir une situation</option>
+                              {MEDICAL_REASONS.map((reason) => (
+                                <option key={reason.value} value={reason.value}>{reason.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </>
+                      )}
+
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Destination</label>
+                        <div className="relative">
+                          <Navigation className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: accent }} />
+                          <input type="text" name="destination" value={formData.destination} onChange={handleChange} required
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} placeholder={isAmbulance ? 'Hopital / Clinique' : 'Cimetiere'} />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Coordonnees GPS</label>
+                        <div className="flex gap-2">
+                          <input type="text" name="gpsLocation" value={formData.gpsLocation} onChange={handleChange}
+                            className="min-w-0 flex-1 rounded-2xl border border-gray-200 bg-white px-5 py-3.5 text-[#0f172a] shadow-sm transition-all focus:ring-2" style={{ '--tw-ring-color': accent } as React.CSSProperties} placeholder="36.8065, 10.1815" />
+                          <button type="button" onClick={getLocation} className="flex shrink-0 items-center justify-center rounded-2xl border border-gray-200 bg-white px-4 text-gray-600 shadow-sm transition-colors hover:bg-gray-50" title="Obtenir ma position">
+                            <MapPin className="h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#991b1b] text-white">
+                        <FileCheck2 className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black text-[#0f172a]">Piece obligatoire</h3>
+                        <p className="text-sm font-semibold text-gray-500">Importez le document correspondant au type de vehicule.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {requiredDocuments.map(uploadBox)}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 font-medium">PDF, JPG, PNG (Max 10MB)</p>
-                {formData.documentProof && <div className={`inline-flex items-center gap-2 text-sm ${textColor} mt-4 font-bold bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100`}><CheckCircle className="w-4 h-4"/> Document attaché</div>}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="pt-6 border-t border-gray-100">
-          <button type="submit" disabled={isSubmitting}
-            className={`w-full flex justify-center py-4 px-4 rounded-2xl shadow-sm text-base font-bold ${headerText} ${primaryBg} ${primaryHover} backdrop-blur-md border focus:outline-none focus:ring-2 focus:ring-offset-2 ${focusRing} transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed`}>
-            {isSubmitting ? 'Envoi en cours...' : 'Confirmer la Demande'}
-          </button>
-        </div>
-      </form>
+                <div className="border-t border-gray-100 bg-gray-50 p-5 md:p-7 xl:border-l xl:border-t-0">
+                  <div className="sticky top-5 space-y-5">
+                    <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${softAccent}`}>
+                        <FileBadge2 className="h-6 w-6" />
+                      </div>
+                      <p className="mt-4 text-sm font-black uppercase tracking-widest text-gray-400">Mission</p>
+                      <h3 className="mt-1 text-2xl font-black text-[#0f172a]">
+                        {isAmbulance ? 'Ambulance' : 'Vehicule funeraire'}
+                      </h3>
+                      <div className="mt-5 space-y-3">
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+                          <span className="text-sm font-bold text-gray-500">Document</span>
+                          <span className="font-black" style={{ color: accent }}>{completedDocuments}/{requiredDocuments.length}</span>
+                        </div>
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+                          <span className="text-sm font-bold text-gray-500">Frais</span>
+                          <span className="font-black" style={{ color: accent }}>{formData.feeAmount} DH</span>
+                        </div>
+                      </div>
+                      {isAmbulance && (
+                        <div className="mt-5 rounded-2xl border border-red-100 bg-red-50 p-4">
+                          <p className="text-sm font-black text-red-700">Frais estimes</p>
+                          <p className="mt-1 text-xs font-bold leading-5 text-red-700">
+                            {formData.serviceArea && formData.medicalReason
+                              ? `${selectedReason?.label} vers ${selectedArea?.label}`
+                              : 'Choisissez la destination et la situation medicale.'}
+                          </p>
+                          {formData.serviceArea === 'outside_region' && (
+                            <p className="mt-2 text-xs font-bold text-red-600">Disponible seulement si l'hopital demande est dans un rayon de 300 km.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <button type="submit" disabled={isSubmitting}
+                      className="w-full rounded-2xl border border-[#991b1b] bg-[#991b1b] px-4 py-4 text-base font-black text-white shadow-lg shadow-red-950/15 transition-all hover:-translate-y-0.5 hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-70">
+                      {isSubmitting ? 'Envoi en cours...' : 'Envoyer la demande'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+        </section>
+      </div>
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 package com.ambulance.app.vehicle.controller;
 
+import com.ambulance.app.request.service.AmbulanceRequestService;
 import com.ambulance.app.vehicle.entity.Vehicle;
 import com.ambulance.app.vehicle.service.VehicleService;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +15,17 @@ import java.util.List;
 public class VehicleController {
 
     private final VehicleService vehicleService;
+    private final AmbulanceRequestService requestService;
 
     @GetMapping
     public ResponseEntity<List<Vehicle>> getAllVehicles() {
+        requestService.refreshTodayAvailability();
         return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
     @GetMapping("/available")
     public ResponseEntity<List<Vehicle>> getAvailableVehicles() {
+        requestService.refreshTodayAvailability();
         return ResponseEntity.ok(vehicleService.getAvailableVehicles());
     }
 

@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import { Zap, Droplet, Upload, CheckCircle, ArrowLeft } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Check, CheckCircle, Droplet, FileBadge2, FileCheck2, IdCard, Phone, PlugZap, Upload, UserRound, Zap } from 'lucide-react';
 import axios from 'axios';
 
-export default function AuthorizationServices() {
-  const [step, setStep] = useState<1 | 2>(1);
+const DOCUMENTS = [
+  { fieldName: 'nationalIdCardProof', title: "Carte d'identite nationale", hint: 'CIN du demandeur.' },
+  { fieldName: 'constructionPermitProof', title: 'Permis de construire', hint: 'Autorisation de construction.' },
+  { fieldName: 'habitationPermitProof', title: "Permis d'habiter", hint: "Document d'habitation." },
+  { fieldName: 'stabilityCertificateProof', title: 'Certificat de stabilite', hint: 'Certificat technique du bien.' },
+  { fieldName: 'commissionNoticeProof', title: 'Avis de la commission', hint: 'Avis administratif requis.' }
+];
 
+export default function AuthorizationServices() {
   const [formData, setFormData] = useState({
     clientName: '',
     clientPhone: '',
@@ -21,25 +27,56 @@ export default function AuthorizationServices() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const isWater = formData.authorizationType === 'WATER';
+  const currentLabel = isWater ? 'Eau potable' : formData.authorizationType ? 'Electricite' : 'A choisir';
+  const completedDocuments = DOCUMENTS.filter((document) => Boolean((formData as any)[document.fieldName])).length;
+  const progressPercent = Math.round((completedDocuments / DOCUMENTS.length) * 100);
+  const accentClasses = isWater ? {
+    side: 'bg-[#0f766e]',
+    text: 'text-[#0f766e]',
+    soft: 'bg-teal-50 text-teal-700',
+    button: 'bg-[#0f766e] hover:bg-[#115e59] border-[#0f766e]',
+    ring: 'focus:ring-teal-500',
+    shadow: 'shadow-teal-950/15'
+  } : {
+    side: 'bg-[#92400e]',
+    text: 'text-[#92400e]',
+    soft: 'bg-amber-50 text-amber-700',
+    button: 'bg-[#92400e] hover:bg-[#78350f] border-[#92400e]',
+    ring: 'focus:ring-amber-500',
+    shadow: 'shadow-amber-950/15'
+  };
+
+  const requiredDocuments = useMemo(() => DOCUMENTS, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleTypeChange = (type: string) => {
+    setFormData({ ...formData, authorizationType: type });
+    setError('');
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, [fieldName]: reader.result as string });
-      };
+      reader.onloadend = () => setFormData({ ...formData, [fieldName]: reader.result as string });
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError('');
+
+    if (!formData.authorizationType) {
+      setError('Veuillez choisir le type de raccordement.');
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -47,179 +84,149 @@ export default function AuthorizationServices() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        setStep(1);
-      }, 3000);
+      setTimeout(() => setSuccess(false), 3000);
       setFormData({
         clientName: '', clientPhone: '', cin: '', authorizationType: '',
         nationalIdCardProof: '', constructionPermitProof: '', habitationPermitProof: '',
         stabilityCertificateProof: '', commissionNoticeProof: ''
       });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez réessayer.');
+      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez reessayer.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const selectAuthType = (type: string) => {
-    setFormData({ ...formData, authorizationType: type });
-    setStep(2);
+  const uploadBox = ({ fieldName, title, hint }: { fieldName: string; title: string; hint: string }) => {
+    const isAttached = Boolean((formData as any)[fieldName]);
+
+    return (
+      <label key={fieldName} htmlFor={fieldName} className={`group block cursor-pointer rounded-2xl border p-5 transition-all ${isAttached ? `${accentClasses.side} border-transparent text-white shadow-lg` : 'border-gray-200 bg-white text-[#0f172a] shadow-sm hover:-translate-y-0.5 hover:shadow-lg'}`}>
+        <input id={fieldName} name={fieldName} type="file" className="sr-only" onChange={(e) => handleFileChange(e, fieldName)} required />
+        <div className="flex items-start gap-5">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isAttached ? 'bg-white/15' : accentClasses.soft}`}>
+            {isAttached ? <Check className="h-5 w-5" /> : <Upload className="h-5 w-5" />}
+          </div>
+          <div>
+            <p className="font-black">{title}</p>
+            <p className={`mt-1 text-sm font-semibold ${isAttached ? 'text-white/75' : 'text-gray-500'}`}>{hint}</p>
+            <p className={`mt-4 inline-flex rounded-full px-3 py-1 text-xs font-black uppercase tracking-wider ${isAttached ? 'bg-white/15 text-white' : 'bg-gray-100 text-gray-500'}`}>
+              {isAttached ? 'Document ajoute' : 'Choisir un fichier'}
+            </p>
+          </div>
+        </div>
+      </label>
+    );
   };
 
-  // Theme generation (transparent glass colors)
-  const isWater = formData.authorizationType === 'WATER';
-  const themeColor = isWater ? 'blue' : 'yellow';
-  
-  const primaryBg = isWater ? 'bg-blue-500/10 border-blue-200' : 'bg-amber-500/10 border-amber-200';
-  const primaryHover = isWater ? 'hover:bg-blue-500/20' : 'hover:bg-amber-500/20';
-  const focusRing = isWater ? 'focus:ring-blue-400' : 'focus:ring-amber-400';
-  const textColor = isWater ? 'text-blue-600' : 'text-amber-600';
-  const headerText = isWater ? 'text-blue-700' : 'text-amber-700';
-  const lightBg = isWater ? 'bg-blue-50/50' : 'bg-amber-50/50';
-
-  if (step === 1) {
-    return (
-      <div className="max-w-5xl mx-auto space-y-10 font-sans animate-fade-in-up">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-[#064e3b] font-bold text-xs tracking-widest uppercase mb-4">
-            Infrastructures
-          </span>
-          <h2 className="text-4xl font-black text-[#0f172a] mb-4">Services de Raccordement</h2>
-          <p className="text-gray-500 text-lg">Sélectionnez le réseau auquel vous souhaitez raccorder votre domicile ou établissement.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Water Card */}
-          <div 
-            onClick={() => selectAuthType('WATER')}
-            className="group cursor-pointer relative overflow-hidden bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[2.5rem] p-10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-blue-50/50 hover:border-blue-200"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-blue-500/20 transition-colors duration-500 shadow-sm border border-blue-100">
-              <Droplet className="w-10 h-10 text-blue-600 group-hover:text-blue-700 transition-colors duration-500" />
-            </div>
-            <h3 className="text-3xl font-black text-[#0f172a] mb-4 group-hover:text-blue-700 transition-colors">Eau Potable</h3>
-            <p className="text-gray-600 text-lg mb-6 line-clamp-3">
-              Demande d'autorisation pour le raccordement au réseau public de distribution d'eau potable de la commune.
-            </p>
-          </div>
-
-          {/* Electricity Card */}
-          <div 
-            onClick={() => selectAuthType('ELECTRICITY')}
-            className="group cursor-pointer relative overflow-hidden bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[2.5rem] p-10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-amber-50/50 hover:border-amber-200"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-amber-500/20 transition-colors duration-500 shadow-sm border border-amber-100">
-              <Zap className="w-10 h-10 text-amber-600 group-hover:text-amber-700 transition-colors duration-500" />
-            </div>
-            <h3 className="text-3xl font-black text-[#0f172a] mb-4 group-hover:text-amber-700 transition-colors">Électricité</h3>
-            <p className="text-gray-600 text-lg mb-6 line-clamp-3">
-              Demande d'autorisation pour l'installation d'un compteur et le raccordement au réseau électrique basse tension.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const FileUploadInput = ({ label, fieldName }: { label: string, fieldName: string }) => (
-    <div>
-      <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">{label} <span className="text-red-500">*</span></label>
-      <div className={`mt-1 flex justify-center px-6 pt-6 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-gray-300 transition-colors ${lightBg} h-36 items-center`}>
-        <div className="space-y-2 text-center w-full">
-          <div className="flex text-sm text-gray-600 justify-center">
-            <label htmlFor={fieldName} className={`relative cursor-pointer rounded-md font-bold ${textColor} hover:underline focus-within:outline-none`}>
-              <span>Télécharger le fichier</span>
-              <input id={fieldName} name={fieldName} type="file" className="sr-only" onChange={(e) => handleFileChange(e, fieldName)} required />
-            </label>
-          </div>
-          {(formData as any)[fieldName] ? (
-            <div className={`inline-flex items-center gap-2 text-sm ${textColor} mt-2 font-bold bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100`}><CheckCircle className="w-4 h-4"/> Envoyé</div>
-          ) : (
-            <p className="text-xs text-gray-500 font-medium">Format PDF/JPG requis</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="max-w-5xl mx-auto space-y-6 font-sans animate-fade-in-up">
-      <button 
-        onClick={() => setStep(1)}
-        className="flex items-center text-gray-500 hover:text-[#0f172a] font-bold transition-colors mb-6"
-      >
-        <ArrowLeft className="w-5 h-5 mr-2" />
-        Retour à la sélection
-      </button>
+    <div className="mx-auto max-w-7xl animate-fade-in-up font-sans">
+      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+        <aside className="overflow-hidden rounded-[2rem] border border-gray-200 bg-[#f8fafc] shadow-xl shadow-slate-900/5">
+          <div className={`relative min-h-full ${formData.authorizationType ? accentClasses.side : 'bg-[#334155]'} p-7 text-white`}>
+            <div className="relative">
+              <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-white ${formData.authorizationType ? accentClasses.text : 'text-slate-700'} shadow-lg`}>
+                <PlugZap className="h-8 w-8" />
+              </div>
+              <p className="mt-8 text-xs font-black uppercase tracking-[0.24em] text-white/70">Infrastructures</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight">Raccordement</h2>
+              <p className="mt-4 text-sm font-semibold leading-7 text-white/75">
+                Dossier pour demander le raccordement a l'eau potable ou a l'electricite avec toutes les pieces separees.
+              </p>
+              <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-black text-white/80">Documents</span>
+                  <span className="text-sm font-black text-white">{completedDocuments}/{DOCUMENTS.length}</span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/15">
+                  <div className="h-full rounded-full bg-white transition-all" style={{ width: `${progressPercent}%` }} />
+                </div>
+                <p className="mt-3 text-xs font-bold text-white/70">{formData.authorizationType ? `${progressPercent}% du dossier complete` : 'Choisissez un reseau pour commencer'}</p>
+              </div>
+            </div>
+          </div>
+        </aside>
 
-      <div className={`p-8 rounded-[2rem] border ${primaryBg} backdrop-blur-xl shadow-sm relative overflow-hidden`}>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-        <div className="relative z-10">
-          <h2 className={`text-3xl font-black mb-2 flex items-center gap-4 ${headerText}`}>
-            {isWater ? <Droplet className="w-8 h-8" /> : <Zap className="w-8 h-8" />}
-            Raccordement à {isWater ? 'l\'Eau Potable' : 'l\'Électricité'}
-          </h2>
-          <p className={`${textColor} opacity-90 text-lg font-medium`}>Remplissez les informations et téléchargez les documents requis.</p>
-        </div>
+        <section className="space-y-5">
+          {success && <div className="flex items-center gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-700 shadow-sm"><CheckCircle className="h-6 w-6" /><span className="font-bold">Demande de raccordement soumise avec succes !</span></div>}
+          {error && <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm"><span className="font-bold">{error}</span></div>}
+
+          <form onSubmit={handleSubmit} className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-xl shadow-slate-900/5">
+            <div className="border-b border-gray-100 bg-white p-5 md:p-7">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className={`text-sm font-black uppercase tracking-widest ${formData.authorizationType ? accentClasses.text : 'text-slate-600'}`}>Type de raccordement</p>
+                  <p className="mt-1 text-sm font-semibold text-gray-500">Selectionnez le reseau demande.</p>
+                </div>
+                <div className="inline-flex rounded-2xl border border-gray-200 bg-gray-50 p-1">
+                  {[{ value: 'WATER', label: 'Eau', icon: Droplet }, { value: 'ELECTRICITY', label: 'Electricite', icon: Zap }].map((option) => {
+                    const Icon = option.icon;
+                    const active = formData.authorizationType === option.value;
+                    return (
+                      <label key={option.value} className={`inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition-all ${active ? `${accentClasses.side} text-white shadow-sm` : 'text-gray-500 hover:text-slate-900'}`}>
+                        <input type="radio" name="authorizationType" value={option.value} className="sr-only" onChange={() => handleTypeChange(option.value)} checked={active} />
+                        <Icon className="h-4 w-4" />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {!formData.authorizationType ? (
+              <div className="p-6 md:p-10">
+                <div className="rounded-3xl border border-dashed border-gray-300 bg-slate-50 p-8 text-center">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-slate-700 shadow-sm"><PlugZap className="h-7 w-7" /></div>
+                  <p className="text-xl font-black text-[#0f172a]">Choisissez d'abord le type de raccordement</p>
+                  <p className="mx-auto mt-2 max-w-xl text-sm font-semibold leading-6 text-gray-500">Le formulaire et les documents requis apparaitront apres votre selection.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-0 xl:grid-cols-[1fr_300px]">
+                <div className="space-y-8 p-5 md:p-7">
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${accentClasses.soft}`}><UserRound className="h-5 w-5" /></div>
+                      <div><h3 className="text-xl font-black text-[#0f172a]">Informations du demandeur</h3><p className="text-sm font-semibold text-gray-500">Identite du citoyen qui depose la demande.</p></div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                      <div><label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Nom complet</label><input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required className={`w-full rounded-2xl border border-gray-200 bg-white px-5 py-3.5 text-[#0f172a] shadow-sm transition-all focus:ring-2 ${accentClasses.ring}`} placeholder="Nom complet" /></div>
+                      <div><label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Telephone</label><input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required className={`w-full rounded-2xl border border-gray-200 bg-white px-5 py-3.5 text-[#0f172a] shadow-sm transition-all focus:ring-2 ${accentClasses.ring}`} placeholder="+212 6..." /></div>
+                      <div className="md:col-span-2"><label className="mb-2 ml-1 block text-sm font-bold text-gray-700">CIN</label><div className="relative"><IdCard className={`pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 ${accentClasses.text}`} /><input type="text" name="cin" value={formData.cin} onChange={handleChange} required className={`w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 ${accentClasses.ring}`} placeholder="AB123456" /></div></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${accentClasses.side} text-white`}><FileCheck2 className="h-5 w-5" /></div>
+                      <div><h3 className="text-xl font-black text-[#0f172a]">Documents requis</h3><p className="text-sm font-semibold text-gray-500">Importez les pieces une par une.</p></div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">{requiredDocuments.map(uploadBox)}</div>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-100 bg-gray-50 p-5 md:p-7 xl:border-l xl:border-t-0">
+                  <div className="sticky top-5 space-y-5">
+                    <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${accentClasses.soft}`}><FileBadge2 className="h-6 w-6" /></div>
+                      <p className="mt-4 text-sm font-black uppercase tracking-widest text-gray-400">Dossier</p>
+                      <h3 className="mt-1 text-2xl font-black text-[#0f172a]">{currentLabel}</h3>
+                      <div className="mt-5 space-y-3">
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3"><span className="text-sm font-bold text-gray-500">Pieces</span><span className={`font-black ${accentClasses.text}`}>{completedDocuments}/{DOCUMENTS.length}</span></div>
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3"><span className="text-sm font-bold text-gray-500">Frais</span><span className={`font-black ${accentClasses.text}`}>0 DH</span></div>
+                      </div>
+                    </div>
+                    <button type="submit" disabled={isSubmitting} className={`w-full rounded-2xl border px-4 py-4 text-base font-black text-white shadow-lg transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70 ${accentClasses.button} ${accentClasses.shadow}`}>
+                      {isSubmitting ? 'Envoi en cours...' : 'Envoyer la demande'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+        </section>
       </div>
-
-      {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-3 text-green-700 shadow-sm animate-fade-in-up">
-          <CheckCircle className="w-6 h-6" />
-          <span className="font-bold">Demande de raccordement soumise avec succès !</span>
-        </div>
-      )}
-      
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-3 text-red-700 shadow-sm animate-fade-in-up">
-          <span className="font-bold">{error}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className={`bg-white/70 backdrop-blur-xl border border-gray-200 p-8 md:p-10 rounded-[2.5rem] shadow-sm space-y-8 relative overflow-hidden`}>
-        <div className={`absolute top-0 right-0 w-2 h-full ${isWater ? 'bg-blue-400' : 'bg-amber-400'}`}></div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Nom Complet</label>
-            <input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required
-              className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="Nom Complet" />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Numéro de Téléphone</label>
-            <input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required
-              className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="+212 6..." />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">CIN (ID)</label>
-            <input type="text" name="cin" value={formData.cin} onChange={handleChange} required
-              className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="AB123456" />
-          </div>
-
-          <div className="md:col-span-2 mt-4">
-            <h3 className="text-xl font-black text-[#0f172a] border-b pb-2">Documents Requis</h3>
-          </div>
-
-          <FileUploadInput label="Carte d'Identité (CIN)" fieldName="nationalIdCardProof" />
-          <FileUploadInput label="Permis de Construire" fieldName="constructionPermitProof" />
-          <FileUploadInput label="Permis d'Habiter" fieldName="habitationPermitProof" />
-          <FileUploadInput label="Certificat de Stabilité" fieldName="stabilityCertificateProof" />
-          <div className="md:col-span-2">
-            <FileUploadInput label="Avis de la Commission" fieldName="commissionNoticeProof" />
-          </div>
-        </div>
-
-        <div className="pt-6 border-t border-gray-100 mt-8">
-          <button type="submit" disabled={isSubmitting}
-            className={`w-full flex justify-center py-4 px-4 rounded-2xl shadow-sm text-base font-bold ${headerText} ${primaryBg} ${primaryHover} backdrop-blur-md border focus:outline-none focus:ring-2 focus:ring-offset-2 ${focusRing} transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed`}>
-            {isSubmitting ? 'Envoi en cours...' : 'Soumettre la demande d\'autorisation'}
-          </button>
-        </div>
-      </form>
     </div>
   );
 }

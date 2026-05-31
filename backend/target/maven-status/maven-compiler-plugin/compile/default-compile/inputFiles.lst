@@ -1,6 +1,7 @@
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\vehicle\repository\VehicleRepository.java
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\attestation\service\AdministrativeAttestationRequestService.java
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\civilstatus\service\CivilStatusRequestService.java
+C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\config\MissionAvailabilityScheduler.java
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\legalisation\entity\LegalisationRequest.java
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\auth\dto\AuthResponse.java
 C:\Users\farou\Desktop\nwirat\backend\src\main\java\com\ambulance\app\auth\controller\AuthController.java

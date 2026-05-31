@@ -1,5 +1,16 @@
 import React from 'react';
-import { LayoutDashboard, Settings as SettingsIcon, LogOut, Truck, FileText, Zap, ListChecks, MapPinned } from 'lucide-react';
+import {
+  BookOpenCheck,
+  FileCheck2,
+  FileText,
+  LayoutDashboard,
+  ListChecks,
+  LogOut,
+  MapPinned,
+  Settings as SettingsIcon,
+  Truck,
+  Zap
+} from 'lucide-react';
 
 interface SidebarProps {
   activeFeature: string;
@@ -8,120 +19,84 @@ interface SidebarProps {
   userRole: string;
 }
 
+const menuSections = [
+  {
+    title: 'Demandes citoyennes',
+    items: [
+      { id: 'request-vehicle', label: 'Request Vehicule', detail: 'Ambulance and funeral car', icon: Truck, roles: ['USER', 'AGENT', 'ADMIN'] },
+      { id: 'authorization', label: 'Raccordements', detail: 'Water and electricity', icon: Zap, roles: ['USER', 'AGENT', 'ADMIN'] },
+      { id: 'legalisation', label: 'Legalisation', detail: 'Signature and copy', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
+      { id: 'administrative-attestation', label: 'Attestation administrative', detail: 'Property attestation', icon: FileCheck2, roles: ['USER', 'AGENT', 'ADMIN'] },
+      { id: 'civil-status', label: 'Etat civil', detail: 'Birth, death, family book', icon: BookOpenCheck, roles: ['USER', 'AGENT', 'ADMIN'] }
+    ]
+  },
+  {
+    title: 'Suivi',
+    items: [
+      { id: 'track-requests', label: 'Suivi des demandes', detail: 'Track request status', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN'] },
+      { id: 'driver-missions', label: 'Mes missions', detail: 'Assigned driver trips', icon: MapPinned, roles: ['DRIVER'] }
+    ]
+  },
+  {
+    title: 'Administration',
+    items: [
+      { id: 'dashboard', label: 'Dashboard staff', detail: 'Manage requests', icon: LayoutDashboard, roles: ['AGENT', 'ADMIN'] },
+      { id: 'settings', label: 'Parametres', detail: 'Account settings', icon: SettingsIcon, roles: ['USER', 'AGENT', 'ADMIN'] }
+    ]
+  }
+];
+
 export default function Sidebar({ activeFeature, setActiveFeature, onLogout, userRole }: SidebarProps) {
-  const displayRole = userRole?.replace('ROLE_', '') || 'USER';
-  const menuSections = [
-    {
-      title: 'Transport',
-      items: [
-        { id: 'request-vehicle', label: 'Véhicules', icon: Truck, roles: ['USER', 'AGENT', 'ADMIN'] }
-      ]
-    },
-    {
-      title: 'Administratif',
-      items: [
-        { id: 'authorization', label: 'Raccordements', icon: Zap, roles: ['USER', 'AGENT', 'ADMIN'] },
-        { id: 'legalisation', label: 'Légalisation', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
-        { id: 'administrative-attestation', label: 'Attestation Administrative', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
-        { id: 'civil-status', label: 'Etat Civil', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] }
-      ]
-    },
-    {
-      title: 'Suivi',
-      items: [
-        { id: 'track-requests', label: 'Suivi des Demandes', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN'] },
-        { id: 'driver-missions', label: 'My Missions', icon: MapPinned, roles: ['DRIVER'] }
-      ]
-    },
-    {
-      title: 'Administration',
-      items: [
-        { id: 'dashboard', label: 'Staff Dashboard', icon: LayoutDashboard, roles: ['AGENT', 'ADMIN'] },
-        { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: ['USER', 'AGENT', 'ADMIN'] }
-      ]
-    }
-  ];
+  const normalizedRole = userRole?.replace('ROLE_', '') || 'USER';
 
   return (
-    <div className="flex flex-col h-full font-sans text-white bg-gradient-to-b from-[#0f172a] via-[#111827] to-[#064e3b]">
-      {/* Brand area (Visible in sidebar mode) */}
-      <div className="px-6 py-8 mb-4 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#064e3b] to-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-900/50">
-            <span className="text-[#fdfbf7] font-bold text-xl font-serif">JN</span>
-          </div>
-          <span className="text-xl font-serif font-black text-white tracking-wide">
-            Nouirat
-          </span>
-        </div>
-      </div>
-
-      {/* Navigation */}
-      <div className="flex-1 space-y-6 px-4 pt-2 overflow-y-auto">
-        {menuSections.map((section, sectionIdx) => {
-          const normalizedRole = userRole?.replace('ROLE_', '') || 'USER';
-          // Check if any items in this section are available for this role
-          const visibleItems = section.items.filter(item => item.roles.includes(normalizedRole));
-          
+    <div className="flex h-full flex-col bg-slate-950 text-white">
+      <div className="flex-1 overflow-y-auto px-4 py-5">
+        {menuSections.map((section) => {
+          const visibleItems = section.items.filter((item) => item.roles.includes(normalizedRole));
           if (visibleItems.length === 0) return null;
 
           return (
-            <div key={sectionIdx} className="space-y-2">
-              <p className="px-3 text-xs font-black text-emerald-400/70 uppercase tracking-[0.2em] mb-3 drop-shadow-sm">
-                {section.title}
-              </p>
-              {visibleItems.map((item) => {
-                const isActive = activeFeature === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveFeature(item.id)}
-                    className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden ${isActive
-                        ? 'bg-white/10 text-white font-bold shadow-[0_0_20px_rgba(6,78,59,0.5)] border border-white/20'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+            <div key={section.title} className="mb-7">
+              <p className="mb-3 px-2 text-xs font-black uppercase tracking-[0.2em] text-emerald-300/80">{section.title}</p>
+              <div className="space-y-2">
+                {visibleItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeFeature === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveFeature(item.id)}
+                    className={`group flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition ${
+                        isActive
+                          ? 'border-emerald-400/40 bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950/30'
+                          : 'border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white'
                       }`}
-                  >
-                    {/* Active Background Glow */}
-                    {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-transparent" />
-                    )}
-                    
-                    <div className={`relative z-10 p-2 rounded-xl transition-colors duration-300 ${isActive ? 'bg-emerald-500 text-white shadow-md' : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-emerald-400'}`}>
-                      <item.icon className="w-5 h-5" />
-                    </div>
-                    
-                    <span className="relative z-10 text-base">{item.label}</span>
-                    
-                    {isActive && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-emerald-400 rounded-l-full shadow-[0_0_10px_#34d399]" />
-                    )}
-                  </button>
-                );
-              })}
+                    >
+                      <span className={`flex h-10 w-10 items-center justify-center rounded-md ${isActive ? 'bg-slate-950/10' : 'bg-white/5'}`}>
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-black">{item.label}</span>
+                        <span className={`mt-0.5 block truncate text-xs font-bold ${isActive ? 'text-slate-800/70' : 'text-slate-500 group-hover:text-slate-300'}`}>{item.detail}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           );
         })}
       </div>
 
-      {/* User Profile & Logout */}
-      <div className="p-4 m-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md">
-        <div className="flex items-center gap-3 mb-4 p-2">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#064e3b] to-emerald-400 p-0.5 shadow-lg">
-            <div className="w-full h-full bg-[#0f172a] rounded-full flex items-center justify-center">
-              <span className="text-sm font-bold text-emerald-300">{userRole ? userRole.substring(0, 2).toUpperCase() : 'US'}</span>
-            </div>
-          </div>
-          <div className="text-left overflow-hidden">
-            <p className="text-sm font-bold text-white truncate">Utilisateur</p>
-            <p className="text-xs text-emerald-400 font-medium truncate">{displayRole}</p>
-          </div>
+      <div className="mt-auto border-t border-white/10 bg-slate-950 p-4 shadow-[0_-20px_40px_rgba(2,6,23,0.35)]">
+        <div className="mb-3 rounded-lg border border-white/10 bg-white/[0.04] p-3">
+          <p className="text-sm font-black">Utilisateur</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">{normalizedRole}</p>
         </div>
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500 transition-all duration-300 font-bold shadow-sm"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>Déconnexion</span>
+        <button onClick={onLogout} className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-300/20 bg-rose-500 px-4 py-3 text-sm font-black text-white shadow-lg shadow-rose-950/30 transition hover:bg-rose-600">
+          <LogOut className="h-5 w-5" />
+          Deconnexion
         </button>
       </div>
     </div>

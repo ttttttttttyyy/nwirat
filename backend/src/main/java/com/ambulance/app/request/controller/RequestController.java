@@ -53,6 +53,12 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getDriverMissions(username));
     }
 
+    @PatchMapping("/driver/{id}/complete")
+    public ResponseEntity<AmbulanceRequest> completeDriverMission(@PathVariable Long id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(requestService.completeDriverMission(id, username));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
         requestService.deleteRequest(id);

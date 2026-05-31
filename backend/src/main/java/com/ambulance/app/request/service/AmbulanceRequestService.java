@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +62,7 @@ public class AmbulanceRequestService {
     );
 
     public List<AmbulanceRequest> getAllRequests() {
+        refreshTodayAvailability();
         return requestRepository.findAll();
     }
 
@@ -89,7 +91,9 @@ public class AmbulanceRequestService {
         if (reason != null && !reason.trim().isEmpty()) {
             req.setRejectionReason(reason);
         }
-        return requestRepository.save(req);
+        AmbulanceRequest saved = requestRepository.save(req);
+        refreshAssignedAvailability(saved);
+        return saved;
     }
 
     public List<AmbulanceRequest> getMyRequests(String email) {
@@ -116,16 +120,124 @@ public class AmbulanceRequestService {
         req.setAssignedVehiclePlate(vehicle.getPlateNumber());
         req.setStatus("ACCEPTED");
 
-        driver.setStatus("ON_MISSION");
-        driver.setAvailable(false);
-        vehicle.setStatus("ON_MISSION");
-        vehicle.setAvailable(false);
-        driverRepository.save(driver);
-        vehicleRepository.save(vehicle);
-        return requestRepository.save(req);
+        if (isManuallyUnavailable(driver.getStatus()) || isManuallyUnavailable(vehicle.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Driver or vehicle is not available for assignments");
+        }
+
+        LocalDate scheduledDay = scheduledDay(req);
+        boolean driverBusy = requestRepository.findAll().stream()
+                .filter(existing -> !existing.getId().equals(req.getId()))
+                .anyMatch(existing -> driver.getId().equals(existing.getAssignedDriverId()) && sameScheduledDay(existing, scheduledDay) && isActiveMission(existing));
+        boolean vehicleBusy = requestRepository.findAll().stream()
+                .filter(existing -> !existing.getId().equals(req.getId()))
+                .anyMatch(existing -> vehicle.getId().equals(existing.getAssignedVehicleId()) && sameScheduledDay(existing, scheduledDay) && isActiveMission(existing));
+
+        if (driverBusy || vehicleBusy) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Driver or vehicle already has a mission scheduled for this day");
+        }
+
+        if (scheduledDay.equals(LocalDate.now())) {
+            driver.setStatus("ON_MISSION");
+            driver.setAvailable(false);
+            vehicle.setStatus("ON_MISSION");
+            vehicle.setAvailable(false);
+            driverRepository.save(driver);
+            vehicleRepository.save(vehicle);
+        }
+        AmbulanceRequest saved = requestRepository.save(req);
+        refreshAssignedAvailability(saved);
+        return saved;
+    }
+
+    public AmbulanceRequest completeDriverMission(Long id, String email) {
+        Driver driver = driverRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Driver not found"));
+        AmbulanceRequest req = requestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        if (!driver.getId().equals(req.getAssignedDriverId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This mission is not assigned to you");
+        }
+
+        req.setStatus("COMPLETED");
+        AmbulanceRequest saved = requestRepository.save(req);
+        refreshAssignedAvailability(saved);
+        return saved;
+    }
+
+    public void refreshTodayAvailability() {
+        driverRepository.findAll().forEach(driver -> {
+            if (!isManuallyUnavailable(driver.getStatus())) {
+                boolean busyToday = hasActiveMissionToday(driver.getId(), null);
+                driver.setStatus(busyToday ? "ON_MISSION" : "AVAILABLE");
+                driver.setAvailable(!busyToday);
+                driverRepository.save(driver);
+            }
+        });
+
+        vehicleRepository.findAll().forEach(vehicle -> {
+            if (!isManuallyUnavailable(vehicle.getStatus())) {
+                boolean busyToday = hasActiveMissionToday(null, vehicle.getId());
+                vehicle.setStatus(busyToday ? "ON_MISSION" : "AVAILABLE");
+                vehicle.setAvailable(!busyToday);
+                vehicleRepository.save(vehicle);
+            }
+        });
+    }
+
+    private void refreshAssignedAvailability(AmbulanceRequest request) {
+        if (request.getAssignedDriverId() != null) {
+            driverRepository.findById(request.getAssignedDriverId()).ifPresent(driver -> {
+                if (!isManuallyUnavailable(driver.getStatus())) {
+                    boolean busyToday = hasActiveMissionToday(driver.getId(), null);
+                    driver.setStatus(busyToday ? "ON_MISSION" : "AVAILABLE");
+                    driver.setAvailable(!busyToday);
+                    driverRepository.save(driver);
+                }
+            });
+        }
+
+        if (request.getAssignedVehicleId() != null) {
+            vehicleRepository.findById(request.getAssignedVehicleId()).ifPresent(vehicle -> {
+                if (!isManuallyUnavailable(vehicle.getStatus())) {
+                    boolean busyToday = hasActiveMissionToday(null, vehicle.getId());
+                    vehicle.setStatus(busyToday ? "ON_MISSION" : "AVAILABLE");
+                    vehicle.setAvailable(!busyToday);
+                    vehicleRepository.save(vehicle);
+                }
+            });
+        }
+    }
+
+    private boolean hasActiveMissionToday(Long driverId, Long vehicleId) {
+        LocalDate today = LocalDate.now();
+        return requestRepository.findAll().stream()
+                .filter(this::isActiveMission)
+                .filter(req -> sameScheduledDay(req, today))
+                .anyMatch(req -> (driverId != null && driverId.equals(req.getAssignedDriverId())) || (vehicleId != null && vehicleId.equals(req.getAssignedVehicleId())));
+    }
+
+    private boolean isActiveMission(AmbulanceRequest request) {
+        return request.getStatus() != null && Set.of("ACCEPTED", "IN_PROGRESS").contains(request.getStatus());
+    }
+
+    private boolean sameScheduledDay(AmbulanceRequest request, LocalDate day) {
+        return scheduledDay(request).equals(day);
+    }
+
+    private LocalDate scheduledDay(AmbulanceRequest request) {
+        if (request.getScheduledDate() == null || request.getScheduledDate().isBlank()) {
+            return LocalDate.now();
+        }
+        return LocalDateTime.parse(request.getScheduledDate()).toLocalDate();
+    }
+
+    private boolean isManuallyUnavailable(String status) {
+        return "UNAVAILABLE".equals(status) || "BROKEN".equals(status);
     }
 
     public List<AmbulanceRequest> getDriverMissions(String email) {
+        refreshTodayAvailability();
         Driver driver = driverRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Driver not found"));
         return requestRepository.findAll().stream()

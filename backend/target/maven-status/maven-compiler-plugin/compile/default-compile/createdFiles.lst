@@ -43,6 +43,7 @@ com\ambulance\app\legalisation\service\LegalisationRequestService.class
 com\ambulance\app\vehicle\entity\Vehicle.class
 com\ambulance\app\driver\controller\DriverController.class
 com\ambulance\app\legalisation\repository\LegalisationRequestRepository.class
+com\ambulance\app\config\MissionAvailabilityScheduler.class
 com\ambulance\app\auth\dto\RegisterRequest.class
 com\ambulance\app\driver\entity\Driver.class
 com\ambulance\app\config\DataInitializer.class

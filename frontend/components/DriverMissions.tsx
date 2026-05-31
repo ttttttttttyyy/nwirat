@@ -5,16 +5,25 @@ import axios from 'axios';
 export default function DriverMissions() {
   const [missions, setMissions] = useState<any[]>([]);
 
+  const fetchMissions = async () => {
+    const token = localStorage.getItem('token');
+    const res = await axios.get('http://localhost:8080/api/requests/driver/my', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setMissions(res.data);
+  };
+
   useEffect(() => {
-    const fetchMissions = async () => {
-      const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:8080/api/requests/driver/my', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setMissions(res.data);
-    };
     fetchMissions().catch(console.error);
   }, []);
+
+  const finishMission = async (missionId: number) => {
+    const token = localStorage.getItem('token');
+    await axios.patch(`http://localhost:8080/api/requests/driver/${missionId}/complete`, null, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    fetchMissions().catch(console.error);
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f4e6] p-6 font-sans">
@@ -42,6 +51,11 @@ export default function DriverMissions() {
                 <Info icon={Wallet} label="Fee" value={`${mission.feeAmount ?? 0} DH`} />
                 <Info icon={MapPin} label="Pick up" value={mission.pickupLocation} />
               </div>
+              {['ACCEPTED', 'IN_PROGRESS'].includes(mission.status) && (
+                <button onClick={() => finishMission(mission.id)} className="mt-5 h-12 w-full rounded-2xl bg-[#064e3b] font-black text-white shadow-lg shadow-emerald-900/15 hover:bg-[#065f46]">
+                  Announce mission finished
+                </button>
+              )}
             </div>
           ))}
           {missions.length === 0 && <div className="rounded-[2rem] bg-white p-10 text-center font-bold text-slate-500">No missions assigned yet.</div>}

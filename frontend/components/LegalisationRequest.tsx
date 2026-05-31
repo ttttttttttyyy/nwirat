@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FileText, Calendar, Upload, CheckCircle, Shield } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { CalendarDays, Check, CheckCircle, ClipboardSignature, FileBadge2, FileCheck2, Fingerprint, IdCard, Phone, ShieldCheck, Upload, UserRound } from 'lucide-react';
 import axios from 'axios';
 
 export default function LegalisationRequest() {
@@ -17,6 +17,27 @@ export default function LegalisationRequest() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const requiredDocuments = useMemo(() => {
+    const base = [
+      { fieldName: 'identityProof', inputId: 'identityProof', title: "Preuve d'identite", hint: 'Carte CIN ou passeport du demandeur.' },
+      { fieldName: 'documentProof', inputId: 'documentProof', title: 'Document a legaliser', hint: 'Document qui contient la signature ou la copie.' }
+    ];
+
+    if (formData.documentType === 'TRUE_COPY') {
+      base.push({
+        fieldName: 'originalDocumentProof',
+        inputId: 'originalDocumentProof',
+        title: 'Document original',
+        hint: 'Original obligatoire pour comparer la copie.'
+      });
+    }
+
+    return base;
+  }, [formData.documentType]);
+
+  const completedDocuments = requiredDocuments.filter((document) => Boolean((formData as any)[document.fieldName])).length;
+  const progressPercent = Math.round((completedDocuments / requiredDocuments.length) * 100);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,138 +71,228 @@ export default function LegalisationRequest() {
         appointmentDate: '', documentProof: '', originalDocumentProof: '', identityProof: ''
       });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez réessayer.');
+      setError(err.response?.data?.message || 'Erreur lors de la soumission. Veuillez reessayer.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const uploadBox = ({ fieldName, inputId, title, hint }: { fieldName: string; inputId: string; title: string; hint: string }) => {
+    const isAttached = Boolean((formData as any)[fieldName]);
+
+    return (
+      <label
+        key={fieldName}
+        htmlFor={inputId}
+        className={`group relative block cursor-pointer overflow-hidden rounded-2xl border p-5 transition-all ${
+          isAttached
+            ? 'border-[#1e3a5f] bg-[#1e3a5f] text-white shadow-lg shadow-blue-950/10'
+            : 'border-gray-200 bg-white text-[#0f172a] shadow-sm hover:-translate-y-0.5 hover:border-[#1e3a5f] hover:shadow-lg'
+        }`}
+      >
+        <input id={inputId} name={inputId} type="file" className="sr-only" onChange={(e) => handleFileChange(e, fieldName)} required />
+        <div className="flex items-start justify-between gap-5">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isAttached ? 'bg-white/15' : 'bg-amber-50 text-[#1e3a5f]'}`}>
+            {isAttached ? <Check className="w-5 h-5" /> : <Upload className="w-5 h-5" />}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-black">{title}</p>
+            <p className={`mt-1 text-sm font-semibold leading-6 ${isAttached ? 'text-white/75' : 'text-gray-500'}`}>{hint}</p>
+            <p className={`mt-4 inline-flex rounded-full px-3 py-1 text-xs font-black uppercase tracking-wider ${isAttached ? 'bg-white/15 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-amber-50 group-hover:text-[#1e3a5f]'}`}>
+              {isAttached ? 'Document ajoute' : 'Choisir un fichier'}
+            </p>
+          </div>
+        </div>
+      </label>
+    );
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6 font-sans">
-      <div>
-        <h2 className="text-2xl font-serif font-bold text-[#0f172a] mb-2">Service de Légalisation</h2>
-        <p className="text-gray-500">Demandez l'authentification de vos signatures ou la copie conforme de vos documents.</p>
-      </div>
-
-      {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-700">
-          <CheckCircle className="w-5 h-5" />
-          <span className="font-medium">Demande de légalisation soumise avec succès !</span>
-        </div>
-      )}
-      
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
-          <span className="font-medium">{error}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="bg-white border border-gray-200 p-6 md:p-8 rounded-[2rem] shadow-sm space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Type de Service</label>
-            <div className="flex gap-4 flex-col sm:flex-row">
-              <label className={`flex-1 flex items-center justify-center gap-3 p-4 border rounded-xl cursor-pointer transition-all ${formData.documentType === 'SIGNATURE' ? 'bg-[#fdfbf7] border-[#064e3b] text-[#064e3b] ring-1 ring-[#064e3b]' : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
-                <input type="radio" name="documentType" value="SIGNATURE" className="sr-only" onChange={handleChange} checked={formData.documentType === 'SIGNATURE'} />
-                <FileText className="w-5 h-5" />
-                <span className="font-medium">Légalisation de Signature</span>
-              </label>
-              <label className={`flex-1 flex items-center justify-center gap-3 p-4 border rounded-xl cursor-pointer transition-all ${formData.documentType === 'TRUE_COPY' ? 'bg-[#fdfbf7] border-[#064e3b] text-[#064e3b] ring-1 ring-[#064e3b]' : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
-                <input type="radio" name="documentType" value="TRUE_COPY" className="sr-only" onChange={handleChange} checked={formData.documentType === 'TRUE_COPY'} />
-                <Shield className="w-5 h-5" />
-                <span className="font-medium">Copie Conforme</span>
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Nom Complet</label>
-            <input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required
-              className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[#0f172a] focus:ring-2 focus:ring-[#064e3b] transition-all" placeholder="Nom Complet" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Numéro de Téléphone</label>
-            <input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required
-              className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[#0f172a] focus:ring-2 focus:ring-[#064e3b] transition-all" placeholder="+212 6..." />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">CIN (ID)</label>
-            <input type="text" name="cin" value={formData.cin} onChange={handleChange} required
-              className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[#0f172a] focus:ring-2 focus:ring-[#064e3b] transition-all" placeholder="AB123456" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Date de Rendez-vous</label>
+    <div className="mx-auto max-w-7xl animate-fade-in-up font-sans">
+      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+        <aside className="overflow-hidden rounded-[2rem] border border-[#1e3a5f]/10 bg-[#f8fafc] shadow-xl shadow-slate-900/5">
+          <div className="relative min-h-full bg-[#172554] p-7 text-white">
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.08))]" />
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Calendar className="w-5 h-5 text-gray-400" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#1e3a5f] shadow-lg">
+                <ClipboardSignature className="h-8 w-8" />
               </div>
-              <input type="date" name="appointmentDate" value={formData.appointmentDate} onChange={handleChange} required
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[#0f172a] focus:ring-2 focus:ring-[#064e3b] transition-all" />
-            </div>
-          </div>
+              <p className="mt-8 text-xs font-black uppercase tracking-[0.24em] text-amber-100">Bureau administratif</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight">Legalisation</h2>
+              <p className="mt-4 text-sm font-semibold leading-7 text-amber-50/80">
+                Un dossier clair pour authentifier une signature ou valider une copie conforme, avec chaque piece verifiee avant l'envoi.
+              </p>
 
-          {/* Upload Identity Proof */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Preuve d'Identité (CIN / Passeport)</label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-[#064e3b] transition-colors bg-gray-50">
-              <div className="space-y-1 text-center">
-                <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                <div className="flex text-sm text-gray-600 justify-center">
-                  <label htmlFor="identityProof" className="relative cursor-pointer rounded-md font-medium text-[#064e3b] hover:text-[#065f46]">
-                    <span>Télécharger le fichier</span>
-                    <input id="identityProof" name="identityProof" type="file" className="sr-only" onChange={(e) => handleFileChange(e, 'identityProof')} />
-                  </label>
+              <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-black text-amber-50">Documents</span>
+                  <span className="text-sm font-black text-white">{completedDocuments}/{requiredDocuments.length}</span>
                 </div>
-                {formData.identityProof && <p className="text-xs text-[#064e3b] mt-2 font-medium">Document attaché</p>}
-              </div>
-            </div>
-          </div>
-
-          {/* Upload Document Proof */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Document à Légaliser</label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-[#064e3b] transition-colors bg-gray-50 h-32 items-center">
-              <div className="space-y-1 text-center">
-                <div className="flex text-sm text-gray-600 justify-center">
-                  <label htmlFor="documentProof" className="relative cursor-pointer rounded-md font-medium text-[#064e3b] hover:text-[#065f46]">
-                    <span>Télécharger document</span>
-                    <input id="documentProof" name="documentProof" type="file" className="sr-only" onChange={(e) => handleFileChange(e, 'documentProof')} />
-                  </label>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/15">
+                  <div className="h-full rounded-full bg-white transition-all" style={{ width: `${progressPercent}%` }} />
                 </div>
-                {formData.documentProof && <p className="text-xs text-[#064e3b] mt-2 font-medium">Document attaché</p>}
+                <p className="mt-3 text-xs font-bold text-amber-50/75">{progressPercent}% du dossier complete</p>
               </div>
-            </div>
-          </div>
 
-          {/* Upload Original Document Proof (Only for TRUE_COPY) */}
-          {formData.documentType === 'TRUE_COPY' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Document Original</label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-[#064e3b] transition-colors bg-gray-50 h-32 items-center">
-                <div className="space-y-1 text-center">
-                  <div className="flex text-sm text-gray-600 justify-center">
-                    <label htmlFor="originalDocumentProof" className="relative cursor-pointer rounded-md font-medium text-[#064e3b] hover:text-[#065f46]">
-                      <span>Télécharger original</span>
-                      <input id="originalDocumentProof" name="originalDocumentProof" type="file" className="sr-only" onChange={(e) => handleFileChange(e, 'originalDocumentProof')} />
-                    </label>
+              <div className="mt-6 space-y-3">
+                {[
+                  'Choisir le type',
+                  'Remplir les informations',
+                  'Importer les documents'
+                ].map((step, index) => (
+                  <div key={step} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-black text-[#1e3a5f]">{index + 1}</span>
+                    <span className="text-sm font-bold text-amber-50">{step}</span>
                   </div>
-                  {formData.originalDocumentProof && <p className="text-xs text-[#064e3b] mt-2 font-medium">Document attaché</p>}
-                </div>
+                ))}
               </div>
+            </div>
+          </div>
+        </aside>
+
+        <section className="space-y-5">
+          {success && (
+            <div className="flex items-center gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-700 shadow-sm">
+              <CheckCircle className="h-6 w-6" />
+              <span className="font-bold">Demande de legalisation soumise avec succes !</span>
             </div>
           )}
 
-        </div>
+          {error && (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm">
+              <span className="font-bold">{error}</span>
+            </div>
+          )}
 
-        <div className="pt-4 border-t border-gray-100 mt-6">
-          <button type="submit" disabled={isSubmitting}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-[#064e3b] hover:bg-[#065f46] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#064e3b] transition-all disabled:opacity-70 disabled:cursor-not-allowed">
-            {isSubmitting ? 'Envoi en cours...' : 'Soumettre la demande'}
-          </button>
-        </div>
-      </form>
+          <form onSubmit={handleSubmit} className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-xl shadow-slate-900/5">
+            <div className="border-b border-gray-100 bg-white p-5 md:p-7">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-sm font-black uppercase tracking-widest text-[#1e3a5f]">Type de service</p>
+                  <p className="mt-1 text-sm font-semibold text-gray-500">Selectionnez exactement ce que l'administration doit traiter.</p>
+                </div>
+                <div className="inline-flex rounded-2xl border border-gray-200 bg-gray-50 p-1">
+                  {[
+                    { value: 'SIGNATURE', label: 'Signature', icon: Fingerprint },
+                    { value: 'TRUE_COPY', label: 'Copie', icon: ShieldCheck }
+                  ].map((option) => {
+                    const Icon = option.icon;
+                    const active = formData.documentType === option.value;
+                    return (
+                      <label
+                        key={option.value}
+                        className={`inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition-all ${
+                          active ? 'bg-[#1e3a5f] text-white shadow-sm' : 'text-gray-500 hover:text-[#1e3a5f]'
+                        }`}
+                      >
+                        <input type="radio" name="documentType" value={option.value} className="sr-only" onChange={handleChange} checked={active} />
+                        <Icon className="h-4 w-4" />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-0 xl:grid-cols-[1fr_300px]">
+              <div className="space-y-8 p-5 md:p-7">
+                <div>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-[#1e3a5f]">
+                      <UserRound className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-[#0f172a]">Informations du demandeur</h3>
+                      <p className="text-sm font-semibold text-gray-500">Ces donnees seront utilisees pour suivre votre dossier.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Nom complet</label>
+                      <div className="relative">
+                        <UserRound className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#1e3a5f]" />
+                        <input type="text" name="clientName" value={formData.clientName} onChange={handleChange} required
+                          className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-[#1e3a5f]" placeholder="Nom complet" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Telephone</label>
+                      <div className="relative">
+                        <Phone className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#1e3a5f]" />
+                        <input type="tel" name="clientPhone" value={formData.clientPhone} onChange={handleChange} required
+                          className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-[#1e3a5f]" placeholder="+212 6..." />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">CIN</label>
+                      <div className="relative">
+                        <IdCard className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#1e3a5f]" />
+                        <input type="text" name="cin" value={formData.cin} onChange={handleChange} required
+                          className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-[#1e3a5f]" placeholder="AB123456" />
+                      </div>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="mb-2 ml-1 block text-sm font-bold text-gray-700">Date de rendez-vous</label>
+                      <div className="relative">
+                        <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#1e3a5f]" />
+                        <input type="date" name="appointmentDate" value={formData.appointmentDate} onChange={handleChange} required
+                          className="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-12 pr-5 text-[#0f172a] shadow-sm transition-all focus:ring-2 focus:ring-[#1e3a5f]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1e3a5f] text-white">
+                      <FileCheck2 className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-[#0f172a]">Pieces du dossier</h3>
+                      <p className="text-sm font-semibold text-gray-500">Cliquez sur chaque bloc pour importer le document correspondant.</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4">
+                    {requiredDocuments.map(uploadBox)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 bg-gray-50 p-5 md:p-7 xl:border-l xl:border-t-0">
+                <div className="sticky top-5 space-y-5">
+                  <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-[#1e3a5f]">
+                      <FileBadge2 className="h-6 w-6" />
+                    </div>
+                    <p className="mt-4 text-sm font-black uppercase tracking-widest text-gray-400">Dossier</p>
+                    <h3 className="mt-1 text-2xl font-black text-[#0f172a]">
+                      {formData.documentType === 'TRUE_COPY' ? 'Copie conforme' : 'Signature'}
+                    </h3>
+                    <div className="mt-5 space-y-3">
+                      <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+                        <span className="text-sm font-bold text-gray-500">Pieces</span>
+                        <span className="font-black text-[#1e3a5f]">{requiredDocuments.length}</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+                        <span className="text-sm font-bold text-gray-500">Frais</span>
+                        <span className="font-black text-[#1e3a5f]">0 DH</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" disabled={isSubmitting}
+                    className="w-full rounded-2xl border border-[#1e3a5f] bg-[#1e3a5f] px-4 py-4 text-base font-black text-white shadow-lg shadow-blue-950/15 transition-all hover:-translate-y-0.5 hover:bg-[#244b76] disabled:cursor-not-allowed disabled:opacity-70">
+                    {isSubmitting ? 'Envoi en cours...' : 'Envoyer la demande'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   );
 }
+
