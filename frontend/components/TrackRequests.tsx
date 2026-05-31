@@ -11,8 +11,8 @@ export default function TrackRequests() {
       try {
         const token = localStorage.getItem('token');
         
-        // Fetch vehicle requests, authorizations, and legalisations
-        const [vehiclesRes, authsRes, legalisationsRes] = await Promise.all([
+        // Fetch vehicle requests, authorizations, legalisations, attestations, and civil status requests
+        const [vehiclesRes, authsRes, legalisationsRes, attestationsRes, civilStatusRes] = await Promise.all([
           axios.get('http://localhost:8080/api/requests/my', {
             headers: { Authorization: `Bearer ${token}` }
           }),
@@ -21,6 +21,12 @@ export default function TrackRequests() {
           }),
           axios.get('http://localhost:8080/api/legalisation/my', {
             headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get('http://localhost:8080/api/administrative-attestations/my', {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get('http://localhost:8080/api/civil-status/my', {
+            headers: { Authorization: `Bearer ${token}` }
           })
         ]);
 
@@ -28,24 +34,45 @@ export default function TrackRequests() {
           id: `VEH-${r.id}`,
           type: r.vehicleType === 'ambulance' ? 'Véhicule (Ambulance)' : 'Véhicule (Funéraire)',
           date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-          status: r.status || 'PENDING'
+          status: r.status || 'PENDING',
+          details: r.vehicleType === 'ambulance'
+            ? `${r.serviceArea || 'Destination'} - ${r.medicalReason || 'Situation'} - ${r.feeAmount ?? 0} DH`
+            : ''
         }));
 
         const mappedAuths = authsRes.data.map((r: any) => ({
           id: `AUT-${r.id}`,
           type: r.authorizationType === 'WATER' ? 'Raccordement (Eau)' : 'Raccordement (Électricité)',
           date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-          status: r.status || 'PENDING'
+          status: r.status || 'PENDING',
+          details: ''
         }));
 
         const mappedLegalisations = legalisationsRes.data.map((r: any) => ({
           id: `LEG-${r.id}`,
           type: r.documentType === 'SIGNATURE' ? 'Légalisation de Signature' : 'Copie Conforme',
           date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-          status: r.status || 'PENDING'
+          status: r.status || 'PENDING',
+          details: ''
         }));
 
-        const allRequests = [...mappedVehicles, ...mappedAuths, ...mappedLegalisations];
+        const mappedAttestations = attestationsRes.data.map((r: any) => ({
+          id: `ATT-${r.id}`,
+          type: 'Attestation Administrative',
+          date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          status: r.status || 'PENDING',
+          details: r.propertyAddress || ''
+        }));
+
+        const mappedCivilStatus = civilStatusRes.data.map((r: any) => ({
+          id: `EC-${r.id}`,
+          type: `Etat Civil (${r.requestType || 'Demande'})`,
+          date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          status: r.status || 'PENDING',
+          details: `${r.feeAmount ?? 0} DH`
+        }));
+
+        const allRequests = [...mappedVehicles, ...mappedAuths, ...mappedLegalisations, ...mappedAttestations, ...mappedCivilStatus];
         // Sort newest first roughly based on ID since we don't have perfect timestamps easily comparable here
         allRequests.sort((a, b) => b.id.localeCompare(a.id));
 
@@ -117,6 +144,7 @@ export default function TrackRequests() {
                       <span className="text-gray-300">•</span>
                       <span className="text-xs text-gray-500">{req.date}</span>
                     </div>
+                    {req.details && <p className="mt-1 text-xs font-semibold text-gray-500">{req.details}</p>}
                   </div>
                 </div>
                 <div>

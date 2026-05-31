@@ -4,9 +4,13 @@ import StaffDashboard from './features/StaffDashboard';
 import Settings from './features/Settings';
 import VehicleRequest from './VehicleRequest';
 import LegalisationRequest from './LegalisationRequest';
+import AdministrativeAttestationRequest from './AdministrativeAttestationRequest';
+import CivilStatusRequest from './CivilStatusRequest';
+import DriverMissions from './DriverMissions';
 import TrackRequests from './TrackRequests';
 import AuthorizationServices from './AuthorizationServices';
 import { Menu, X, Mail, Phone, MapPin as MapPinIcon, Shield, Truck, Zap, Info, Globe, MessageCircle, ArrowRight, Activity, Users } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
 interface MainDashboardProps {
   onLogout: () => void;
@@ -14,7 +18,17 @@ interface MainDashboardProps {
 }
 
 export default function MainDashboard({ onLogout, userRole }: MainDashboardProps) {
-  const [activeFeature, setActiveFeature] = useState('lobby');
+  const tokenInfo = React.useMemo(() => {
+    try {
+      const token = localStorage.getItem('token');
+      return token ? jwtDecode<any>(token) : {};
+    } catch {
+      return {};
+    }
+  }, []);
+  const normalizedRole = (userRole || tokenInfo.role || '').replace('ROLE_', '');
+  const isDriverOnly = normalizedRole === 'DRIVER' || tokenInfo.servicePermissions === 'DRIVER';
+  const [activeFeature, setActiveFeature] = useState(isDriverOnly ? 'driver-missions' : 'lobby');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -329,8 +343,14 @@ export default function MainDashboard({ onLogout, userRole }: MainDashboardProps
         return <div className="animate-fade-in-up"><VehicleRequest /></div>;
       case 'legalisation':
         return <div className="animate-fade-in-up"><LegalisationRequest /></div>;
+      case 'administrative-attestation':
+        return <div className="animate-fade-in-up"><AdministrativeAttestationRequest /></div>;
+      case 'civil-status':
+        return <div className="animate-fade-in-up"><CivilStatusRequest /></div>;
       case 'track-requests':
         return <div className="animate-fade-in-up"><TrackRequests /></div>;
+      case 'driver-missions':
+        return <div className="animate-fade-in-up"><DriverMissions /></div>;
       case 'authorization':
         return <div className="animate-fade-in-up"><AuthorizationServices /></div>;
       case 'settings':
@@ -443,9 +463,14 @@ export default function MainDashboard({ onLogout, userRole }: MainDashboardProps
 
       {/* Main Content Area */}
       <main className="flex-1 w-full relative z-10 transition-all duration-300 pt-[72px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-10">
-          {activeFeature !== 'lobby' && (
+        <div className={activeFeature === 'dashboard' ? 'w-full px-0 py-0' : 'max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-10'}>
+          {activeFeature !== 'lobby' && activeFeature !== 'dashboard' && (
              <div className="bg-white/60 backdrop-blur-3xl border border-white rounded-[3rem] p-6 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] min-h-[80vh]">
+               {renderFeature()}
+             </div>
+          )}
+          {activeFeature === 'dashboard' && (
+             <div className="min-h-[80vh]">
                {renderFeature()}
              </div>
           )}

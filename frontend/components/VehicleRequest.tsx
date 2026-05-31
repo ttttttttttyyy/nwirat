@@ -2,15 +2,38 @@ import React, { useState } from 'react';
 import { Truck, MapPin, Navigation, Calendar, Upload, CheckCircle, HeartPulse, ShieldAlert, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 
+const SERVICE_AREAS = [
+  { value: 'rabat', label: 'Rabat', fee: 180 },
+  { value: 'sale', label: 'Sale', fee: 180 },
+  { value: 'kenitra', label: 'Kenitra', fee: 120 },
+  { value: 'sidi_kacem', label: 'Sidi Kacem', fee: 90 },
+  { value: 'outside_region', label: 'Outside the region', fee: 300 },
+];
+
+const MEDICAL_REASONS = [
+  { value: 'accident', label: 'Accident' },
+  { value: 'giving_birth', label: 'Giving birth' },
+  { value: 'mental_issues', label: 'Mental issues' },
+  { value: 'long_term_sickness', label: 'Long-term sickness' },
+  { value: 'other', label: 'Other' },
+];
+
+const FREE_MEDICAL_REASONS = new Set(['accident', 'giving_birth', 'mental_issues', 'long_term_sickness']);
+
 export default function VehicleRequest() {
   const [step, setStep] = useState<1 | 2>(1);
 
   const [formData, setFormData] = useState({
     clientName: '',
     clientPhone: '',
+    clientCin: '',
     pickupLocation: '',
     destination: '',
     vehicleType: '',
+    serviceArea: '',
+    medicalReason: '',
+    feeAmount: 0,
+    feeReason: '',
     gpsLocation: '',
     scheduledDate: '',
     documentProof: ''
@@ -20,8 +43,29 @@ export default function VehicleRequest() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  const calculateFee = (serviceArea: string, medicalReason: string) => {
+    if (FREE_MEDICAL_REASONS.has(medicalReason)) {
+      return { feeAmount: 0, feeReason: 'Medical exemption' };
+    }
+
+    const area = SERVICE_AREAS.find((item) => item.value === serviceArea);
+    return {
+      feeAmount: area?.fee ?? 0,
+      feeReason: serviceArea === 'outside_region'
+        ? 'Outside the region fee, available only within 300 km of the requested hospital'
+        : 'Destination fee'
+    };
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const nextFormData = { ...formData, [e.target.name]: e.target.value };
+
+    if (e.target.name === 'serviceArea' || e.target.name === 'medicalReason') {
+      setFormData({ ...nextFormData, ...calculateFee(nextFormData.serviceArea, nextFormData.medicalReason) });
+      return;
+    }
+
+    setFormData(nextFormData);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +95,9 @@ export default function VehicleRequest() {
         setStep(1);
       }, 3000);
       setFormData({
-        clientName: '', clientPhone: '', pickupLocation: '',
-        destination: '', vehicleType: '', gpsLocation: '',
+        clientName: '', clientPhone: '', clientCin: '', pickupLocation: '',
+        destination: '', vehicleType: '', serviceArea: '', medicalReason: '',
+        feeAmount: 0, feeReason: '', gpsLocation: '',
         scheduledDate: '', documentProof: ''
       });
     } catch (err: any) {
@@ -63,7 +108,14 @@ export default function VehicleRequest() {
   };
 
   const selectVehicleType = (type: string) => {
-    setFormData({ ...formData, vehicleType: type });
+    setFormData({
+      ...formData,
+      vehicleType: type,
+      serviceArea: type === 'ambulance' ? formData.serviceArea : '',
+      medicalReason: type === 'ambulance' ? formData.medicalReason : '',
+      feeAmount: type === 'ambulance' ? formData.feeAmount : 0,
+      feeReason: type === 'ambulance' ? formData.feeReason : ''
+    });
     setStep(2);
   };
 
@@ -94,6 +146,8 @@ export default function VehicleRequest() {
   const textColor = isAmbulance ? 'text-red-600' : 'text-slate-600';
   const headerText = isAmbulance ? 'text-red-700' : 'text-slate-800';
   const lightBg = isAmbulance ? 'bg-red-50/50' : 'bg-slate-50/50';
+  const selectedArea = SERVICE_AREAS.find((area) => area.value === formData.serviceArea);
+  const selectedReason = MEDICAL_REASONS.find((reason) => reason.value === formData.medicalReason);
 
   if (step === 1) {
     return (
@@ -200,6 +254,14 @@ export default function VehicleRequest() {
               className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="+212 6..." />
           </div>
 
+          {isAmbulance && (
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">CIN du Patient</label>
+              <input type="text" name="clientCin" value={formData.clientCin} onChange={handleChange} required
+                className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`} placeholder="AB123456" />
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Date et Heure Prévue</label>
             <div className="relative">
@@ -222,6 +284,32 @@ export default function VehicleRequest() {
             </div>
           </div>
           
+          {isAmbulance && (
+            <>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Destination autorisee</label>
+                <select name="serviceArea" value={formData.serviceArea} onChange={handleChange} required
+                  className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`}>
+                  <option value="">Choisir une destination</option>
+                  {SERVICE_AREAS.map((area) => (
+                    <option key={area.value} value={area.value}>{area.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Situation medicale</label>
+                <select name="medicalReason" value={formData.medicalReason} onChange={handleChange} required
+                  className={`w-full px-5 py-3.5 bg-white border border-gray-200 rounded-2xl text-[#0f172a] focus:ring-2 ${focusRing} transition-all shadow-sm`}>
+                  <option value="">Choisir une situation</option>
+                  {MEDICAL_REASONS.map((reason) => (
+                    <option key={reason.value} value={reason.value}>{reason.label}</option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
+
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Destination</label>
             <div className="relative">
@@ -248,6 +336,25 @@ export default function VehicleRequest() {
               </button>
             </div>
           </div>
+
+          {isAmbulance && (
+            <div className="md:col-span-2 rounded-2xl border border-red-100 bg-red-50/60 p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-sm font-black text-red-700 uppercase tracking-wider">Frais estimes</p>
+                  <p className="mt-1 text-sm font-medium text-red-700">
+                    {formData.serviceArea && formData.medicalReason
+                      ? `${selectedReason?.label} vers ${selectedArea?.label}`
+                      : 'Choisissez la destination et la situation medicale.'}
+                  </p>
+                  {formData.serviceArea === 'outside_region' && (
+                    <p className="mt-2 text-xs font-bold text-red-600">Disponible seulement si l&apos;hopital demande est dans un rayon de 300 km.</p>
+                  )}
+                </div>
+                <div className="text-3xl font-black text-red-700">{formData.feeAmount} DH</div>
+              </div>
+            </div>
+          )}
 
           <div className="md:col-span-2">
             <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Document Requis : {documentLabel} <span className="text-red-500">*</span></label>

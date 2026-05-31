@@ -27,5 +27,8 @@ public class Vehicle {
     @Builder.Default
     private boolean available = true;
 
+    @Builder.Default
+    private String status = "AVAILABLE"; // AVAILABLE, ON_MISSION, UNAVAILABLE, BROKEN
+
     private String currentLocation;
 }

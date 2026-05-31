@@ -42,6 +42,17 @@ public class RequestController {
         return ResponseEntity.ok(requestService.updateRequestStatus(id, status, reason));
     }
 
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<AmbulanceRequest> assignMission(@PathVariable Long id, @RequestParam Long driverId, @RequestParam Long vehicleId) {
+        return ResponseEntity.ok(requestService.assignMission(id, driverId, vehicleId));
+    }
+
+    @GetMapping("/driver/my")
+    public ResponseEntity<List<AmbulanceRequest>> getDriverMissions() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(requestService.getDriverMissions(username));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
         requestService.deleteRequest(id);

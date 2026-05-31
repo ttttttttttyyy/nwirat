@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Settings as SettingsIcon, LogOut, Truck, FileText, Zap, ListChecks } from 'lucide-react';
+import { LayoutDashboard, Settings as SettingsIcon, LogOut, Truck, FileText, Zap, ListChecks, MapPinned } from 'lucide-react';
 
 interface SidebarProps {
   activeFeature: string;
@@ -9,6 +9,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activeFeature, setActiveFeature, onLogout, userRole }: SidebarProps) {
+  const displayRole = userRole?.replace('ROLE_', '') || 'USER';
   const menuSections = [
     {
       title: 'Transport',
@@ -20,13 +21,16 @@ export default function Sidebar({ activeFeature, setActiveFeature, onLogout, use
       title: 'Administratif',
       items: [
         { id: 'authorization', label: 'Raccordements', icon: Zap, roles: ['USER', 'AGENT', 'ADMIN'] },
-        { id: 'legalisation', label: 'Légalisation', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] }
+        { id: 'legalisation', label: 'Légalisation', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
+        { id: 'administrative-attestation', label: 'Attestation Administrative', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
+        { id: 'civil-status', label: 'Etat Civil', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] }
       ]
     },
     {
       title: 'Suivi',
       items: [
-        { id: 'track-requests', label: 'Suivi des Demandes', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN'] }
+        { id: 'track-requests', label: 'Suivi des Demandes', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN'] },
+        { id: 'driver-missions', label: 'My Missions', icon: MapPinned, roles: ['DRIVER'] }
       ]
     },
     {
@@ -109,7 +113,7 @@ export default function Sidebar({ activeFeature, setActiveFeature, onLogout, use
           </div>
           <div className="text-left overflow-hidden">
             <p className="text-sm font-bold text-white truncate">Utilisateur</p>
-            <p className="text-xs text-emerald-400 font-medium truncate">{userRole || 'CITOYEN'}</p>
+            <p className="text-xs text-emerald-400 font-medium truncate">{displayRole}</p>
           </div>
         </div>
         <button

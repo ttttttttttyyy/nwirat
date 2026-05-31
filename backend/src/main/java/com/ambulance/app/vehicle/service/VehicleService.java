@@ -29,4 +29,15 @@ public class VehicleService {
         return vehicleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vehicle not found with ID: " + id));
     }
+
+    public Vehicle updateVehicle(Long id, Vehicle vehicle) {
+        Vehicle existing = getVehicleById(id);
+        existing.setPlateNumber(vehicle.getPlateNumber());
+        existing.setModel(vehicle.getModel());
+        existing.setType(vehicle.getType());
+        existing.setAvailable(vehicle.isAvailable());
+        existing.setStatus(vehicle.getStatus());
+        existing.setCurrentLocation(vehicle.getCurrentLocation());
+        return vehicleRepository.save(existing);
+    }
 }

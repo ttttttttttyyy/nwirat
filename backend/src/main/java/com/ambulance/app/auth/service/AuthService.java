@@ -46,6 +46,7 @@ public class AuthService {
         java.util.Map<String, Object> extraClaims = new java.util.HashMap<>();
         extraClaims.put("role", user.getRole());
         extraClaims.put("name", user.getName());
+        extraClaims.put("servicePermissions", user.getServicePermissions());
         var jwtToken = jwtUtil.generateToken(extraClaims, user);
         return new AuthResponse(jwtToken);
     }
@@ -64,6 +65,7 @@ public class AuthService {
         java.util.Map<String, Object> extraClaims = new java.util.HashMap<>();
         extraClaims.put("role", user.getRole());
         extraClaims.put("name", user.getName());
+        extraClaims.put("servicePermissions", user.getServicePermissions());
         var jwtToken = jwtUtil.generateToken(extraClaims, user);
         return new AuthResponse(jwtToken);
     }

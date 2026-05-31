@@ -2,6 +2,7 @@ package com.ambulance.app.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,9 +35,15 @@ public class User implements UserDetails {
     private String cin;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     private String role; // e.g., ROLE_USER, ROLE_ADMIN
+
+    @Builder.Default
+    private Boolean banned = false;
+
+    private String servicePermissions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,13 +54,13 @@ public class User implements UserDetails {
     public boolean isAccountNonExpired() { return true; }
 
     @Override
-    public boolean isAccountNonLocked() { return true; }
+    public boolean isAccountNonLocked() { return !Boolean.TRUE.equals(banned); }
 
     @Override
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return !Boolean.TRUE.equals(banned); }
 
     @Override
     public String getUsername() {

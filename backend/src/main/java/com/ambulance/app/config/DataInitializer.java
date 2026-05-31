@@ -16,17 +16,25 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.findByEmail("agent@gmail.com").isEmpty()) {
-            User admin = User.builder()
-                    .name("System Admin")
+        userRepository.findByEmail("agent@gmail.com").ifPresentOrElse(existingUser -> {
+            existingUser.setRole("ROLE_ADMIN");
+            existingUser.setPassword(passwordEncoder.encode("password"));
+            existingUser.setServicePermissions("DASHBOARD,USERS,ADMINS,FLEET,VEH,AUT,LEG,ATT,EC");
+            existingUser.setBanned(false);
+            userRepository.save(existingUser);
+            System.out.println("Updated admin access for existing user: agent@gmail.com");
+        }, () -> {
+            User agent = User.builder()
+                    .name("Agent User")
                     .email("agent@gmail.com")
-                    .cin("ADMIN001")
+                    .cin("AGENT001")
                     .age(30)
                     .password(passwordEncoder.encode("password"))
                     .role("ROLE_ADMIN")
+                    .servicePermissions("DASHBOARD,USERS,ADMINS,FLEET,VEH,AUT,LEG,ATT,EC")
                     .build();
-            userRepository.save(admin);
+            userRepository.save(agent);
             System.out.println("Admin user created: agent@gmail.com / password");
-        }
+        });
     }
 }

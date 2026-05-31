@@ -26,6 +26,8 @@ public class AmbulanceRequest {
     @Column(nullable = false)
     private String clientPhone;
 
+    private String clientCin;
+
     // We can keep these or allow them to be nullable if we only rely on gpsLocation
     @Column(nullable = false)
     private String pickupLocation;
@@ -35,6 +37,14 @@ public class AmbulanceRequest {
     
     // New fields for Vehicle Request features
     private String vehicleType; // e.g. "ambulance" or "funeral"
+
+    private String serviceArea; // rabat, sale, kenitra, sidi_kacem, outside_region
+
+    private String medicalReason; // accident, giving_birth, mental_issues, long_term_sickness, other
+
+    private Integer feeAmount;
+
+    private String feeReason;
     
     private String gpsLocation; // coordinates or exact address
 
@@ -48,6 +58,11 @@ public class AmbulanceRequest {
     private String status; // PENDING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
 
     private LocalDateTime requestTime;
+
+    private Long assignedDriverId;
+    private String assignedDriverName;
+    private Long assignedVehicleId;
+    private String assignedVehiclePlate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
