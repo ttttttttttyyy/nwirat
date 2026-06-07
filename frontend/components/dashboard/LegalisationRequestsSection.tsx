@@ -4,8 +4,8 @@ export default function LegalisationRequestsSection(props: RequestsSectionProps)
   return (
     <RequestsSection
       {...props}
-      title="Legalisation Requests"
-      description="Manage signature legalisation and certified copy requests."
+      title="Demandes de Légalisations"
+      description="Gérez les demandes de légalisation de signature et de copie conforme."
     />
   );
 }

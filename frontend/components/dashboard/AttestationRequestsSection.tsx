@@ -4,8 +4,8 @@ export default function AttestationRequestsSection(props: RequestsSectionProps) 
   return (
     <RequestsSection
       {...props}
-      title="Attestation Administrative Requests"
-      description="Manage administrative attestation requests and uploaded property documents."
+      title="Demandes d'Attestations Administratives"
+      description="Gérez les demandes d'attestation administrative et les documents de propriété soumis."
     />
   );
 }

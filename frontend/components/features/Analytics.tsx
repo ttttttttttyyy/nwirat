@@ -5,8 +5,8 @@ export default function Analytics() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Analytics Overview</h2>
-        <p className="text-slate-400 mt-1">Monitor your system traffic and user engagement.</p>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Aperçu Analytique</h2>
+        <p className="text-slate-400 mt-1">Suivez le trafic de votre système et l'engagement des utilisateurs.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -16,7 +16,7 @@ export default function Analytics() {
               <TrendingUp className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-400">Total Visits</p>
+              <p className="text-sm font-medium text-slate-400">Total des Visites</p>
               <p className="text-2xl font-bold text-white">124.5K</p>
             </div>
           </div>
@@ -34,7 +34,7 @@ export default function Analytics() {
               <Users className="w-6 h-6 text-blue-400" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-400">Active Users</p>
+              <p className="text-sm font-medium text-slate-400">Utilisateurs Actifs</p>
               <p className="text-2xl font-bold text-white">8,234</p>
             </div>
           </div>
@@ -51,7 +51,7 @@ export default function Analytics() {
               <Activity className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-400">Conversion Rate</p>
+              <p className="text-sm font-medium text-slate-400">Taux de Conversion</p>
               <p className="text-2xl font-bold text-white">3.4%</p>
             </div>
           </div>

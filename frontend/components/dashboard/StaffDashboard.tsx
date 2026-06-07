@@ -24,7 +24,7 @@ import UsersSection from './UsersSection';
 import VehicleRequestsSection from './VehicleRequestsSection';
 import { serviceNav } from './dashboardConfig';
 
-export default function StaffDashboard() {
+export default function StaffDashboard({ onLogout }: { onLogout?: () => void }) {
   const [recentRequests, setRecentRequests] = useState<any[]>([]);
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterType, setFilterType] = useState('DASHBOARD');
@@ -68,7 +68,7 @@ export default function StaffDashboard() {
 
   const [rejectModal, setRejectModal] = useState({ open: false, requestId: '', type: 'VEH' });
   const [rejectReason, setRejectReason] = useState('');
-  const [docModal, setDocModal] = useState({ open: false, url: '' });
+  const [docModal, setDocModal] = useState<{ open: boolean; docs: any[]; activeIndex: number }>({ open: false, docs: [], activeIndex: 0 });
 
   const fetchAllRequests = async () => {
     try {
@@ -81,94 +81,147 @@ export default function StaffDashboard() {
         axios.get('http://localhost:8080/api/civil-status', { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
-      const mappedVehicles = vehiclesRes.data.map((r: any) => ({
-        id: `VEH-${r.id}`,
-        realId: r.id,
-        rawType: 'VEH',
-        user: r.clientName,
-        type: r.vehicleType === 'ambulance' ? 'Ambulance' : 'Vehicule Funeraire',
-        serviceArea: r.serviceArea,
-        medicalReason: r.medicalReason,
-        feeAmount: r.feeAmount ?? 0,
-        status: r.status || 'PENDING',
-        time: r.scheduledDate ? new Date(r.scheduledDate).toLocaleString('fr-FR') : (r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A'),
-        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
-        scheduledDate: r.scheduledDate,
-        createdDate: r.requestTime,
-        missionTime: r.scheduledDate ? new Date(r.scheduledDate).toLocaleString('fr-FR') : 'N/A',
-        createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
-        assignedDriverId: r.assignedDriverId,
-        assignedDriverName: r.assignedDriverName,
-        assignedVehicleId: r.assignedVehicleId,
-        assignedVehiclePlate: r.assignedVehiclePlate,
-        documentProof: r.documentProof
-      }));
+      const mappedVehicles = vehiclesRes.data.map((r: any) => {
+        const docs = [
+          { name: 'Document de mission', url: r.documentProof }
+        ].filter(d => d.url);
+        return {
+          id: `VEH-${r.id}`,
+          realId: r.id,
+          rawType: 'VEH',
+          user: r.clientName,
+          type: r.vehicleType === 'ambulance' ? 'Ambulance' : 'Vehicule Funeraire',
+          serviceArea: r.serviceArea,
+          medicalReason: r.medicalReason,
+          feeAmount: r.feeAmount ?? 0,
+          status: r.status || 'PENDING',
+          time: r.scheduledDate ? new Date(r.scheduledDate).toLocaleString('fr-FR') : (r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A'),
+          timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+          scheduledDate: r.scheduledDate,
+          createdDate: r.requestTime,
+          missionTime: r.scheduledDate ? new Date(r.scheduledDate).toLocaleString('fr-FR') : 'N/A',
+          createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
+          assignedDriverId: r.assignedDriverId,
+          assignedDriverName: r.assignedDriverName,
+          assignedVehicleId: r.assignedVehicleId,
+          assignedVehiclePlate: r.assignedVehiclePlate,
+          documentProof: r.documentProof,
+          documents: docs
+        };
+      });
 
-      const mappedAuths = authsRes.data.map((r: any) => ({
-        id: `AUT-${r.id}`,
-        realId: r.id,
-        rawType: 'AUT',
-        user: r.clientName,
-        type: r.authorizationType === 'WATER' ? 'Eau Potable' : 'Electricite',
-        status: r.status || 'PENDING',
-        time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
-        scheduledDate: null,
-        createdDate: r.requestTime,
-        missionTime: 'N/A',
-        createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
-        documentProof: r.nationalIdCardProof || r.documentProof
-      }));
+      const mappedAuths = authsRes.data.map((r: any) => {
+        const docs = [
+          { name: 'Carte d\'identité nationale (CIN)', url: r.nationalIdCardProof },
+          { name: 'Permis de construire', url: r.constructionPermitProof },
+          { name: 'Permis d\'habiter', url: r.habitationPermitProof },
+          { name: 'Certificat de stabilité', url: r.stabilityCertificateProof },
+          { name: 'Avis de la commission', url: r.commissionNoticeProof },
+          { name: 'Document justificatif', url: r.documentProof }
+        ].filter(d => d.url);
+        return {
+          id: `AUT-${r.id}`,
+          realId: r.id,
+          rawType: 'AUT',
+          user: r.clientName,
+          type: r.authorizationType === 'WATER' ? 'Eau Potable' : 'Electricite',
+          status: r.status || 'PENDING',
+          time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+          scheduledDate: null,
+          createdDate: r.requestTime,
+          missionTime: 'N/A',
+          createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
+          documentProof: r.nationalIdCardProof || r.documentProof,
+          documents: docs
+        };
+      });
 
-      const mappedLegals = legalsRes.data.map((r: any) => ({
-        id: `LEG-${r.id}`,
-        realId: r.id,
-        rawType: 'LEG',
-        user: r.clientName,
-        type: r.documentType === 'SIGNATURE' ? 'Legalisation de Signature' : 'Copie Conforme',
-        status: r.status || 'PENDING',
-        time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
-        scheduledDate: null,
-        createdDate: r.requestTime,
-        missionTime: 'N/A',
-        createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
-        documentProof: r.documentProof || r.originalDocumentProof || r.identityProof
-      }));
+      const mappedLegals = legalsRes.data.map((r: any) => {
+        const docs = [
+          { name: 'Document à légaliser', url: r.documentProof },
+          { name: 'Document original', url: r.originalDocumentProof },
+          { name: 'Pièce d\'identité', url: r.identityProof }
+        ].filter(d => d.url);
+        return {
+          id: `LEG-${r.id}`,
+          realId: r.id,
+          rawType: 'LEG',
+          user: r.clientName,
+          type: r.documentType === 'SIGNATURE' ? 'Legalisation de Signature' : 'Copie Conforme',
+          status: r.status || 'PENDING',
+          time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+          scheduledDate: null,
+          createdDate: r.requestTime,
+          missionTime: 'N/A',
+          createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
+          documentProof: r.documentProof || r.originalDocumentProof || r.identityProof,
+          documents: docs
+        };
+      });
 
-      const mappedAttestations = attestationsRes.data.map((r: any) => ({
-        id: `ATT-${r.id}`,
-        realId: r.id,
-        rawType: 'ATT',
-        user: r.clientName,
-        type: 'Attestation Administrative',
-        status: r.status || 'PENDING',
-        time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
-        scheduledDate: null,
-        createdDate: r.requestTime,
-        missionTime: 'N/A',
-        createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
-        documentProof: r.saleDonationSadaqaProof || r.ownershipCertificateProof,
-        detail: r.propertyAddress
-      }));
+      const mappedAttestations = attestationsRes.data.map((r: any) => {
+        const docs = [
+          { name: 'Acte de vente / donation / Sadaqa', url: r.saleDonationSadaqaProof },
+          { name: 'Certificat de propriété (Moulkia)', url: r.ownershipCertificateProof }
+        ].filter(d => d.url);
+        return {
+          id: `ATT-${r.id}`,
+          realId: r.id,
+          rawType: 'ATT',
+          user: r.clientName,
+          type: 'Attestation Administrative',
+          status: r.status || 'PENDING',
+          time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+          scheduledDate: null,
+          createdDate: r.requestTime,
+          missionTime: 'N/A',
+          createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
+          documentProof: r.saleDonationSadaqaProof || r.ownershipCertificateProof,
+          detail: r.propertyAddress,
+          documents: docs
+        };
+      });
 
-      const mappedCivilStatus = civilStatusRes.data.map((r: any) => ({
-        id: `EC-${r.id}`,
-        realId: r.id,
-        rawType: 'EC',
-        user: r.clientName,
-        type: 'Etat Civil',
-        status: r.status || 'PENDING',
-        time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-        timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
-        scheduledDate: null,
-        createdDate: r.requestTime,
-        missionTime: 'N/A',
-        createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
-        documentProof: r.requiredDocumentsProof || r.medicalDeathCertificateProof || r.administrativeDeathCertificateProof || r.fullCopyOrBirthActProof || r.birthMedicalCertificateProof || r.marriageActProof || r.husbandCinProof || r.wifeCinProof || r.husbandFullCopyProof || r.wifeFullCopyProof || r.honorDeclarationProof || r.localAuthorityCertificateProof || r.divorceProof || r.previousPartnerDeathProof || r.judgeAuthorizationProof || r.photosProof,
-        detail: `${r.requestType || 'Demande'} - ${r.feeAmount ?? 0} DH`
-      }));
+      const mappedCivilStatus = civilStatusRes.data.map((r: any) => {
+        const docs = [
+          { name: 'Documents requis généraux', url: r.requiredDocumentsProof },
+          { name: 'Certificat médical de décès', url: r.medicalDeathCertificateProof },
+          { name: 'Attestation administrative de décès', url: r.administrativeDeathCertificateProof },
+          { name: 'Copie intégrale / Acte de naissance', url: r.fullCopyOrBirthActProof },
+          { name: 'Certificat médical de naissance', url: r.birthMedicalCertificateProof },
+          { name: 'Acte de mariage', url: r.marriageActProof },
+          { name: 'CIN du mari', url: r.husbandCinProof },
+          { name: 'CIN de l\'épouse', url: r.wifeCinProof },
+          { name: 'Copie intégrale du mari', url: r.husbandFullCopyProof },
+          { name: 'Copie intégrale de l\'épouse', url: r.wifeFullCopyProof },
+          { name: 'Déclaration sur l\'honneur', url: r.honorDeclarationProof },
+          { name: 'Attestation de l\'autorité locale', url: r.localAuthorityCertificateProof },
+          { name: 'Preuve de divorce', url: r.divorceProof },
+          { name: 'Acte de décès de l\'ancien conjoint', url: r.previousPartnerDeathProof },
+          { name: 'Autorisation du juge', url: r.judgeAuthorizationProof },
+          { name: 'Photos', url: r.photosProof }
+        ].filter(d => d.url);
+        return {
+          id: `EC-${r.id}`,
+          realId: r.id,
+          rawType: 'EC',
+          user: r.clientName,
+          type: 'Etat Civil',
+          status: r.status || 'PENDING',
+          time: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+          timestamp: r.requestTime ? new Date(r.requestTime).getTime() : r.id,
+          scheduledDate: null,
+          createdDate: r.requestTime,
+          missionTime: 'N/A',
+          createdTime: r.requestTime ? new Date(r.requestTime).toLocaleString('fr-FR') : 'N/A',
+          documentProof: r.requiredDocumentsProof || r.medicalDeathCertificateProof || r.administrativeDeathCertificateProof || r.fullCopyOrBirthActProof || r.birthMedicalCertificateProof || r.marriageActProof || r.husbandCinProof || r.wifeCinProof || r.husbandFullCopyProof || r.wifeFullCopyProof || r.honorDeclarationProof || r.localAuthorityCertificateProof || r.divorceProof || r.previousPartnerDeathProof || r.judgeAuthorizationProof || r.photosProof,
+          detail: `${r.requestType || 'Demande'} - ${r.feeAmount ?? 0} DH`,
+          documents: docs
+        };
+      });
 
       const all = [...mappedVehicles, ...mappedAuths, ...mappedLegals, ...mappedAttestations, ...mappedCivilStatus];
       const pending = all.filter((r) => r.status === 'PENDING').length;
@@ -311,7 +364,7 @@ export default function StaffDashboard() {
       await fetchAllRequests();
       await fetchAdminData();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'This driver or vehicle is not free for the selected day.');
+      alert(err.response?.data?.message || 'Ce chauffeur ou véhicule n\'est pas libre pour la date sélectionnée.');
     }
   };
 
@@ -477,6 +530,7 @@ export default function StaffDashboard() {
     totalPages,
     visibleRequests,
     isMainAdmin,
+    filteredRequests,
     setSearchQuery,
     setSortTime,
     setFilterStatus,
@@ -501,6 +555,7 @@ export default function StaffDashboard() {
           expanded={isSidebarExpanded}
           onToggle={setIsSidebarExpanded}
           onSelect={(id) => { setFilterType(id); setPage(1); }}
+          onLogout={onLogout}
         />
 
         <section className="min-w-0 flex-1 bg-[#f8f4e6]">
@@ -519,30 +574,30 @@ export default function StaffDashboard() {
                       <div>
                         <div className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-wider text-emerald-50">
                           <Activity className="h-4 w-4" />
-                          Live command center
+                          Centre de contrôle en direct
                         </div>
                         <h1 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">
-                          Commune operations dashboard
+                          Tableau de bord opérationnel
                         </h1>
                         <p className="mt-3 max-w-xl text-sm font-semibold leading-6 text-emerald-50/85">
-                          Requests, citizens, drivers, and vehicles in one clean view so the team can see what needs action first.
+                          Demandes, citoyens, chauffeurs et véhicules regroupés pour prioriser les actions de l'équipe.
                         </p>
                       </div>
                       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
                         <div className="rounded-3xl bg-white/10 p-4">
-                          <p className="text-xs font-black uppercase text-emerald-100">Requests</p>
+                          <p className="text-xs font-black uppercase text-emerald-100">Demandes</p>
                           <p className="mt-2 text-3xl font-black">{statsData.total}</p>
                         </div>
                         <div className="rounded-3xl bg-white/10 p-4">
-                          <p className="text-xs font-black uppercase text-emerald-100">Citizens</p>
+                          <p className="text-xs font-black uppercase text-emerald-100">Citoyens</p>
                           <p className="mt-2 text-3xl font-black">{users.length}</p>
                         </div>
                         <div className="rounded-3xl bg-white/10 p-4">
-                          <p className="text-xs font-black uppercase text-emerald-100">Drivers</p>
+                          <p className="text-xs font-black uppercase text-emerald-100">Chauffeurs</p>
                           <p className="mt-2 text-3xl font-black">{drivers.length}</p>
                         </div>
                         <div className="rounded-3xl bg-white/10 p-4">
-                          <p className="text-xs font-black uppercase text-emerald-100">Vehicles</p>
+                          <p className="text-xs font-black uppercase text-emerald-100">Véhicules</p>
                           <p className="mt-2 text-3xl font-black">{vehicles.length}</p>
                         </div>
                       </div>
@@ -551,7 +606,7 @@ export default function StaffDashboard() {
                     <div className="rounded-[1.75rem] bg-white p-5 text-slate-950">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-xs font-black uppercase tracking-wider text-slate-400">Resolution rate</p>
+                          <p className="text-xs font-black uppercase tracking-wider text-slate-400">Taux de résolution</p>
                           <p className="mt-2 text-5xl font-black text-[#064e3b]">{acceptanceRate}%</p>
                         </div>
                         <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald-50 text-[#064e3b]">
@@ -564,15 +619,15 @@ export default function StaffDashboard() {
                       <div className="mt-6 grid grid-cols-3 gap-3 text-center">
                         <div className="rounded-2xl bg-emerald-50 p-3">
                           <p className="text-xl font-black text-emerald-700">{acceptanceRate}%</p>
-                          <p className="text-[11px] font-black uppercase text-emerald-600">Done</p>
+                          <p className="text-[11px] font-black uppercase text-emerald-600">Traitées</p>
                         </div>
                         <div className="rounded-2xl bg-amber-50 p-3">
                           <p className="text-xl font-black text-amber-700">{pendingRate}%</p>
-                          <p className="text-[11px] font-black uppercase text-amber-600">Pending</p>
+                          <p className="text-[11px] font-black uppercase text-amber-600">En attente</p>
                         </div>
                         <div className="rounded-2xl bg-rose-50 p-3">
                           <p className="text-xl font-black text-rose-700">{rejectedRate}%</p>
-                          <p className="text-[11px] font-black uppercase text-rose-600">Rejected</p>
+                          <p className="text-[11px] font-black uppercase text-rose-600">Rejetées</p>
                         </div>
                       </div>
                     </div>
@@ -585,10 +640,10 @@ export default function StaffDashboard() {
                   <section className="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-2xl font-black text-slate-950">Service demand</h2>
-                        <p className="mt-1 text-sm font-semibold text-slate-500">Requests by component.</p>
+                        <h2 className="text-2xl font-black text-slate-950">Demande de services</h2>
+                        <p className="mt-1 text-sm font-semibold text-slate-500">Demandes par type de service.</p>
                       </div>
-                      <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-[#064e3b]">Top: {topService.label}</span>
+                      <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-[#064e3b]">Principal : {topService.label}</span>
                     </div>
                     <div className="mt-6 space-y-5">
                       {serviceBreakdown.map((item) => {
@@ -615,12 +670,12 @@ export default function StaffDashboard() {
                   </section>
 
                   <section className="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
-                    <h2 className="text-2xl font-black text-slate-950">Operational focus</h2>
+                    <h2 className="text-2xl font-black text-slate-950">Focus opérationnel</h2>
                     <div className="mt-5 grid gap-3">
                       <div className="rounded-3xl bg-amber-50 p-5">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-black uppercase text-amber-700">Needs review</p>
+                            <p className="text-xs font-black uppercase text-amber-700">À valider</p>
                             <p className="mt-2 text-3xl font-black text-slate-950">{statsData.pending}</p>
                           </div>
                           <Clock className="h-9 w-9 text-amber-600" />
@@ -628,16 +683,16 @@ export default function StaffDashboard() {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="rounded-3xl bg-emerald-50 p-5">
-                          <p className="text-xs font-black uppercase text-emerald-700">Active users</p>
+                          <p className="text-xs font-black uppercase text-emerald-700">Utilisateurs actifs</p>
                           <p className="mt-2 text-3xl font-black text-slate-950">{activeStaff}</p>
                         </div>
                         <div className="rounded-3xl bg-rose-50 p-5">
-                          <p className="text-xs font-black uppercase text-rose-700">Banned</p>
+                          <p className="text-xs font-black uppercase text-rose-700">Bannis</p>
                           <p className="mt-2 text-3xl font-black text-slate-950">{blockedUsers}</p>
                         </div>
                       </div>
                       <button type="button" onClick={() => setFilterType('VEH')} className="mt-2 flex h-12 items-center justify-center rounded-2xl bg-[#064e3b] text-sm font-black text-white">
-                        Review vehicle requests
+                        Voir les demandes de véhicules
                       </button>
                     </div>
                   </section>
@@ -645,28 +700,28 @@ export default function StaffDashboard() {
 
                 <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
                   <section className="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
-                    <h2 className="text-2xl font-black text-slate-950">Fleet readiness</h2>
+                    <h2 className="text-2xl font-black text-slate-950">État de la flotte</h2>
                     <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
                       <div className="rounded-3xl border border-slate-100 p-5">
                         <div className="mb-4 flex items-center justify-between">
-                          <p className="font-black text-slate-900">Drivers</p>
+                          <p className="font-black text-slate-900">Chauffeurs</p>
                           <Users className="h-5 w-5 text-[#064e3b]" />
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-center">
-                          <span className="rounded-2xl bg-emerald-50 p-3 text-sm font-black text-emerald-700">{driverAvailability.available}<br />Ready</span>
+                          <span className="rounded-2xl bg-emerald-50 p-3 text-sm font-black text-emerald-700">{driverAvailability.available}<br />Libre</span>
                           <span className="rounded-2xl bg-sky-50 p-3 text-sm font-black text-sky-700">{driverAvailability.busy}<br />Mission</span>
-                          <span className="rounded-2xl bg-rose-50 p-3 text-sm font-black text-rose-700">{driverAvailability.unavailable}<br />Off</span>
+                          <span className="rounded-2xl bg-rose-50 p-3 text-sm font-black text-rose-700">{driverAvailability.unavailable}<br />Indisp.</span>
                         </div>
                       </div>
                       <div className="rounded-3xl border border-slate-100 p-5">
                         <div className="mb-4 flex items-center justify-between">
-                          <p className="font-black text-slate-900">Vehicles</p>
+                          <p className="font-black text-slate-900">Véhicules</p>
                           <Ambulance className="h-5 w-5 text-[#064e3b]" />
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-center">
-                          <span className="rounded-2xl bg-emerald-50 p-3 text-sm font-black text-emerald-700">{vehicleAvailability.available}<br />Ready</span>
+                          <span className="rounded-2xl bg-emerald-50 p-3 text-sm font-black text-emerald-700">{vehicleAvailability.available}<br />Prêt</span>
                           <span className="rounded-2xl bg-sky-50 p-3 text-sm font-black text-sky-700">{vehicleAvailability.busy}<br />Mission</span>
-                          <span className="rounded-2xl bg-rose-50 p-3 text-sm font-black text-rose-700">{vehicleAvailability.unavailable}<br />Off</span>
+                          <span className="rounded-2xl bg-rose-50 p-3 text-sm font-black text-rose-700">{vehicleAvailability.unavailable}<br />Hors serv.</span>
                         </div>
                       </div>
                     </div>
@@ -675,19 +730,19 @@ export default function StaffDashboard() {
                   <section className="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-2xl font-black text-slate-950">Recent activity</h2>
-                        <p className="mt-1 text-sm font-semibold text-slate-500">Latest submitted requests.</p>
+                        <h2 className="text-2xl font-black text-slate-950">Activité récente</h2>
+                        <p className="mt-1 text-sm font-semibold text-slate-500">Dernières demandes reçues.</p>
                       </div>
-                      <button type="button" onClick={() => setFilterType('VEH')} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-[#064e3b]">Open list</button>
+                      <button type="button" onClick={() => setFilterType('VEH')} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-[#064e3b]">Ouvrir la liste</button>
                     </div>
                     <div className="mt-5 space-y-3">
                       {recentActivity.length === 0 ? (
-                        <div className="rounded-3xl border border-dashed border-slate-200 p-8 text-center text-sm font-bold text-slate-400">No requests yet.</div>
+                        <div className="rounded-3xl border border-dashed border-slate-200 p-8 text-center text-sm font-bold text-slate-400">Aucune demande pour le moment.</div>
                       ) : recentActivity.map((request) => (
                         <div key={request.id} className="flex items-center justify-between gap-4 rounded-3xl border border-slate-100 p-4">
                           <div className="min-w-0">
                             <p className="truncate font-black text-slate-900">{request.type}</p>
-                            <p className="truncate text-sm font-semibold text-slate-500">{request.user || 'Unknown citizen'} - {request.time}</p>
+                            <p className="truncate text-sm font-semibold text-slate-500">{request.user || 'Citoyen anonyme'} - {request.time}</p>
                           </div>
                           <span className={`shrink-0 rounded-full border px-3 py-1 text-xs font-black ${getStatusClasses(request.status)}`}>{translateStatus(request.status)}</span>
                         </div>
@@ -789,34 +844,68 @@ export default function StaffDashboard() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setAssignModal({ open: false, request: null, driverId: '', vehicleId: '' })}></div>
           <div className="relative z-10 w-full max-w-lg rounded-[2rem] bg-white p-8 shadow-2xl">
-            <h3 className="text-2xl font-black text-slate-950">Assign mission</h3>
-            <p className="mt-2 text-sm font-semibold text-slate-500">Choose a driver and vehicle free on {assignmentDay}.</p>
+            <h3 className="text-2xl font-black text-slate-950">Assigner la mission</h3>
+            <p className="mt-2 text-sm font-semibold text-slate-500">Choisissez un chauffeur et un véhicule libres pour le {assignmentDay}.</p>
             <select value={assignModal.driverId} onChange={(e) => setAssignModal({ ...assignModal, driverId: e.target.value })} className="mt-5 h-12 w-full rounded-2xl border border-slate-200 px-4 font-bold">
-              <option value="">Select driver</option>
+              <option value="">Sélectionner le chauffeur</option>
               {assignableDrivers.map((driver) => <option key={driver.id} value={driver.id}>{driver.name} - {driver.status}</option>)}
             </select>
             <select value={assignModal.vehicleId} onChange={(e) => setAssignModal({ ...assignModal, vehicleId: e.target.value })} className="mt-3 h-12 w-full rounded-2xl border border-slate-200 px-4 font-bold">
-              <option value="">Select vehicle</option>
+              <option value="">Sélectionner le véhicule</option>
               {assignableVehicles.map((vehicle) => <option key={vehicle.id} value={vehicle.id}>{vehicle.plateNumber} - {vehicle.model} - {vehicle.status}</option>)}
             </select>
-            <button onClick={assignMission} disabled={!assignModal.driverId || !assignModal.vehicleId} className="mt-6 h-12 w-full rounded-2xl bg-[#064e3b] font-black text-white disabled:opacity-50">Accept and assign</button>
+            <button onClick={assignMission} disabled={!assignModal.driverId || !assignModal.vehicleId} className="mt-6 h-12 w-full rounded-2xl bg-[#064e3b] font-black text-white disabled:opacity-50">Accepter et assigner</button>
           </div>
         </div>
       )}
 
-      {docModal.open && (
+      {docModal.open && docModal.docs && docModal.docs.length > 0 && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-10">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setDocModal({ open: false, url: '' })}></div>
-          <div className="relative z-10 flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-[2rem] bg-white p-4 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between px-4 pt-4">
-              <h3 className="text-xl font-black text-slate-950">Document justificatif</h3>
-              <button onClick={() => setDocModal({ open: false, url: '' })} className="rounded-xl bg-gray-100 p-2 text-gray-700 hover:bg-gray-200">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setDocModal({ open: false, docs: [], activeIndex: 0 })}></div>
+          <div className="relative z-10 flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-[2rem] bg-white p-6 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <h3 className="text-xl font-black text-slate-950">Documents justificatifs</h3>
+                <p className="text-xs font-semibold text-slate-500 mt-1">
+                  Document {docModal.activeIndex + 1} sur {docModal.docs.length} : <span className="text-[#064e3b] font-bold">{docModal.docs[docModal.activeIndex].name}</span>
+                </p>
+              </div>
+              <button onClick={() => setDocModal({ open: false, docs: [], activeIndex: 0 })} className="rounded-xl bg-gray-100 p-2 text-gray-700 hover:bg-gray-200">
                 <X className="h-5 w-5" />
               </button>
             </div>
+            
+            {docModal.docs.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-4 mb-4 border-b border-slate-100">
+                {docModal.docs.map((doc, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setDocModal({ ...docModal, activeIndex: idx })}
+                    className={`shrink-0 px-4 py-2 text-xs font-bold rounded-xl transition-all border ${
+                      docModal.activeIndex === idx
+                        ? 'bg-[#064e3b] text-white border-[#064e3b]'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    {doc.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            
             <div className="w-full flex-1 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100">
-              <object data={docModal.url} className="h-full w-full object-contain">
-                <div className="flex h-full items-center justify-center font-medium text-gray-500">Apercu non disponible.</div>
+              <object data={docModal.docs[docModal.activeIndex].url} className="h-full w-full object-contain">
+                <div className="flex h-full flex-col items-center justify-center font-medium text-gray-500 p-6">
+                  <p className="mb-2">Aperçu non disponible directement.</p>
+                  <a 
+                    href={docModal.docs[docModal.activeIndex].url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-[#064e3b] hover:underline font-black text-sm"
+                  >
+                    Ouvrir le document dans un nouvel onglet
+                  </a>
+                </div>
               </object>
             </div>
           </div>

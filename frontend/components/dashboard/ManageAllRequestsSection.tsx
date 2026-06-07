@@ -4,8 +4,8 @@ export default function ManageAllRequestsSection(props: RequestsSectionProps) {
   return (
     <RequestsSection
       {...props}
-      title="Manage All Requests"
-      description="Supervise every citizen request from one place."
+      title="Gérer toutes les demandes"
+      description="Supervisez chaque demande citoyenne depuis un espace unique."
     />
   );
 }

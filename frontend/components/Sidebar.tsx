@@ -23,25 +23,25 @@ const menuSections = [
   {
     title: 'Demandes citoyennes',
     items: [
-      { id: 'request-vehicle', label: 'Request Vehicule', detail: 'Ambulance and funeral car', icon: Truck, roles: ['USER', 'AGENT', 'ADMIN'] },
-      { id: 'authorization', label: 'Raccordements', detail: 'Water and electricity', icon: Zap, roles: ['USER', 'AGENT', 'ADMIN'] },
-      { id: 'legalisation', label: 'Legalisation', detail: 'Signature and copy', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN'] },
-      { id: 'administrative-attestation', label: 'Attestation administrative', detail: 'Property attestation', icon: FileCheck2, roles: ['USER', 'AGENT', 'ADMIN'] },
-      { id: 'civil-status', label: 'Etat civil', detail: 'Birth, death, family book', icon: BookOpenCheck, roles: ['USER', 'AGENT', 'ADMIN'] }
+      { id: 'request-vehicle', label: 'Demande de Véhicule', detail: 'Ambulance et véhicule funéraire', icon: Truck, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] },
+      { id: 'authorization', label: 'Raccordements', detail: 'Eau et électricité', icon: Zap, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] },
+      { id: 'legalisation', label: 'Légalisation', detail: 'Signature et copie conforme', icon: FileText, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] },
+      { id: 'administrative-attestation', label: 'Attestation administrative', detail: 'Certificats de propriété, etc.', icon: FileCheck2, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] },
+      { id: 'civil-status', label: 'État civil', detail: 'Naissance, décès, livret de famille', icon: BookOpenCheck, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] }
     ]
   },
   {
     title: 'Suivi',
     items: [
-      { id: 'track-requests', label: 'Suivi des demandes', detail: 'Track request status', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN'] },
-      { id: 'driver-missions', label: 'Mes missions', detail: 'Assigned driver trips', icon: MapPinned, roles: ['DRIVER'] }
+      { id: 'track-requests', label: 'Suivi des demandes', detail: 'Suivre l\'état des demandes', icon: ListChecks, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] },
+      { id: 'driver-missions', label: 'Mes missions', detail: 'Trajets attribués au chauffeur', icon: MapPinned, roles: ['DRIVER'] }
     ]
   },
   {
     title: 'Administration',
     items: [
-      { id: 'dashboard', label: 'Dashboard staff', detail: 'Manage requests', icon: LayoutDashboard, roles: ['AGENT', 'ADMIN'] },
-      { id: 'settings', label: 'Parametres', detail: 'Account settings', icon: SettingsIcon, roles: ['USER', 'AGENT', 'ADMIN'] }
+      { id: 'dashboard', label: 'Tableau de bord', detail: 'Gérer les demandes', icon: LayoutDashboard, roles: ['AGENT', 'ADMIN'] },
+      { id: 'settings', label: 'Paramètres', detail: 'Paramètres du compte', icon: SettingsIcon, roles: ['USER', 'AGENT', 'ADMIN', 'DRIVER'] }
     ]
   }
 ];

@@ -42,11 +42,11 @@ export default function Login({ onLogin }: LoginProps) {
 
     if (!isLogin) {
       if (formData.password !== formData.confirmPassword) {
-        setError('Passwords do not match');
+        setError('Les mots de passe ne correspondent pas.');
         return;
       }
       if (parseInt(formData.age) < 18) {
-        setError('You must be at least 18 years old');
+        setError('Vous devez avoir au moins 18 ans.');
         return;
       }
     }
@@ -79,11 +79,11 @@ export default function Login({ onLogin }: LoginProps) {
         // Pass to parent
         onLogin(role, token);
       } else {
-        setError('Authentication failed. No token received.');
+        setError('Échec de l\'authentification. Aucun jeton d\'accès reçu.');
       }
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || 'Authentication failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Échec de l\'authentification. Veuillez vérifier vos identifiants.');
     } finally {
       setIsLoading(false);
     }
@@ -101,12 +101,9 @@ export default function Login({ onLogin }: LoginProps) {
 
       <div className="relative z-10 w-full max-w-md p-8 sm:p-10 bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(6,78,59,0.1)] transition-all duration-500 hover:shadow-[0_30px_70px_-15px_rgba(6,78,59,0.15)]">
         <div className="text-center mb-8">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-[#064e3b] to-emerald-600 text-white shadow-xl shadow-emerald-900/20 mb-6 transform hover:scale-105 transition-transform duration-300">
-            {isLogin ? <ShieldCheck className="w-10 h-10" /> : <Activity className="w-10 h-10" />}
-            <div className="absolute inset-0 bg-white/20 rounded-3xl animate-ping opacity-20"></div>
-          </div>
+          <img src="/logo.png" alt="Logo" className="w-20 h-20 object-contain mb-6 mx-auto transform hover:scale-105 transition-transform duration-300" />
           <h1 className="text-4xl font-black text-[#0f172a] mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#0f172a] to-[#064e3b]">
-            Jama3a Nouirat
+            Commune de Nouirat
           </h1>
           <p className="text-gray-500 font-medium">
             {isLogin ? 'Connexion au Portail Digital' : 'Inscription aux services citoyens'}

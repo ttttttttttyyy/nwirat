@@ -4,18 +4,18 @@ import axios from 'axios';
 
 const SERVICE_AREAS = [
   { value: 'rabat', label: 'Rabat', fee: 180 },
-  { value: 'sale', label: 'Sale', fee: 180 },
-  { value: 'kenitra', label: 'Kenitra', fee: 120 },
+  { value: 'sale', label: 'Salé', fee: 180 },
+  { value: 'kenitra', label: 'Kénitra', fee: 120 },
   { value: 'sidi_kacem', label: 'Sidi Kacem', fee: 90 },
-  { value: 'outside_region', label: 'Outside the region', fee: 300 },
+  { value: 'outside_region', label: 'Hors région', fee: 300 },
 ];
 
 const MEDICAL_REASONS = [
   { value: 'accident', label: 'Accident' },
-  { value: 'giving_birth', label: 'Giving birth' },
-  { value: 'mental_issues', label: 'Mental issues' },
-  { value: 'long_term_sickness', label: 'Long-term sickness' },
-  { value: 'other', label: 'Other' },
+  { value: 'giving_birth', label: 'Accouchement' },
+  { value: 'mental_issues', label: 'Troubles mentaux' },
+  { value: 'long_term_sickness', label: 'Maladie de longue durée' },
+  { value: 'other', label: 'Autre' },
 ];
 
 const FREE_MEDICAL_REASONS = new Set(['accident', 'giving_birth', 'mental_issues', 'long_term_sickness']);
@@ -66,15 +66,15 @@ export default function VehicleRequest() {
 
   const calculateFee = (serviceArea: string, medicalReason: string) => {
     if (FREE_MEDICAL_REASONS.has(medicalReason)) {
-      return { feeAmount: 0, feeReason: 'Medical exemption' };
+      return { feeAmount: 0, feeReason: 'Exonération médicale' };
     }
 
     const area = SERVICE_AREAS.find((item) => item.value === serviceArea);
     return {
       feeAmount: area?.fee ?? 0,
       feeReason: serviceArea === 'outside_region'
-        ? 'Outside the region fee, available only within 300 km of the requested hospital'
-        : 'Destination fee'
+        ? 'Tarif hors région, applicable dans un rayon maximal de 300 km de l\'hôpital demandé'
+        : 'Frais de transport'
     };
   };
 

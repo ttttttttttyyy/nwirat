@@ -3,6 +3,7 @@ com\ambulance\app\attestation\controller\AdministrativeAttestationController.cla
 com\ambulance\app\civilstatus\entity\CivilStatusRequest$CivilStatusRequestBuilder.class
 com\ambulance\app\admin\controller\AdminUserController.class
 com\ambulance\app\attestation\entity\AdministrativeAttestationRequest$AdministrativeAttestationRequestBuilder.class
+com\ambulance\app\user\controller\UserController.class
 com\ambulance\app\auth\controller\AuthController.class
 com\ambulance\app\legalisation\entity\LegalisationRequest.class
 com\ambulance\app\attestation\service\AdministrativeAttestationRequestService.class

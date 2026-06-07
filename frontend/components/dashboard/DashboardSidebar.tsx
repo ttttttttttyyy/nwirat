@@ -6,14 +6,15 @@ type DashboardSidebarProps = {
   expanded: boolean;
   onToggle: (expanded: boolean) => void;
   onSelect: (id: string) => void;
+  onLogout?: () => void;
 };
 
-export default function DashboardSidebar({ items, activeId, expanded, onToggle, onSelect }: DashboardSidebarProps) {
+export default function DashboardSidebar({ items, activeId, expanded, onToggle, onSelect, onLogout }: DashboardSidebarProps) {
   return (
     <aside className={`hidden shrink-0 border-r border-emerald-100 bg-white px-3 py-5 transition-all duration-300 md:flex md:flex-col ${expanded ? 'w-72' : 'w-20'}`}>
       <div className={`mb-7 flex items-center gap-3 ${expanded ? 'justify-between' : 'justify-center'}`}>
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#064e3b] text-lg font-black text-white">JN</div>
+          <img src="/logo.png" alt="Logo" className="h-11 w-11 shrink-0 object-contain" />
           {expanded && <span className="text-lg font-black text-slate-950">Admin</span>}
         </div>
         {expanded && (
@@ -45,9 +46,9 @@ export default function DashboardSidebar({ items, activeId, expanded, onToggle, 
           );
         })}
       </nav>
-      <button className={`flex h-11 items-center rounded-2xl text-slate-500 hover:bg-rose-50 hover:text-rose-600 ${expanded ? 'w-full justify-start gap-3 px-3' : 'w-11 justify-center'}`} title="Logout">
+      <button onClick={onLogout} className={`flex h-11 items-center rounded-2xl text-slate-500 hover:bg-rose-50 hover:text-rose-600 ${expanded ? 'w-full justify-start gap-3 px-3' : 'w-11 justify-center'}`} title="Déconnexion">
         <LogOut className="h-5 w-5" />
-        {expanded && <span className="text-sm font-black">Logout</span>}
+        {expanded && <span className="text-sm font-black">Déconnexion</span>}
       </button>
     </aside>
   );

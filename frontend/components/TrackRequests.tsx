@@ -30,15 +30,35 @@ export default function TrackRequests() {
           })
         ]);
 
-        const mappedVehicles = vehiclesRes.data.map((r: any) => ({
-          id: `VEH-${r.id}`,
-          type: r.vehicleType === 'ambulance' ? 'Véhicule (Ambulance)' : 'Véhicule (Funéraire)',
-          date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-          status: r.status || 'PENDING',
-          details: r.vehicleType === 'ambulance'
-            ? `${r.serviceArea || 'Destination'} - ${r.medicalReason || 'Situation'} - ${r.feeAmount ?? 0} DH`
-            : ''
-        }));
+        const areaLabels: Record<string, string> = {
+          rabat: 'Rabat',
+          sale: 'Salé',
+          kenitra: 'Kénitra',
+          sidi_kacem: 'Sidi Kacem',
+          outside_region: 'Hors région'
+        };
+
+        const reasonLabels: Record<string, string> = {
+          accident: 'Accident',
+          giving_birth: 'Accouchement',
+          mental_issues: 'Troubles mentaux',
+          long_term_sickness: 'Maladie de longue durée',
+          other: 'Autre'
+        };
+
+        const mappedVehicles = vehiclesRes.data.map((r: any) => {
+          const area = areaLabels[r.serviceArea] || r.serviceArea || 'Destination';
+          const reason = reasonLabels[r.medicalReason] || r.medicalReason || 'Situation';
+          return {
+            id: `VEH-${r.id}`,
+            type: r.vehicleType === 'ambulance' ? 'Véhicule (Ambulance)' : 'Véhicule (Funéraire)',
+            date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+            status: r.status || 'PENDING',
+            details: r.vehicleType === 'ambulance'
+              ? `${area} - ${reason} - ${r.feeAmount ?? 0} DH`
+              : ''
+          };
+        });
 
         const mappedAuths = authsRes.data.map((r: any) => ({
           id: `AUT-${r.id}`,
@@ -64,13 +84,21 @@ export default function TrackRequests() {
           details: r.propertyAddress || ''
         }));
 
-        const mappedCivilStatus = civilStatusRes.data.map((r: any) => ({
-          id: `EC-${r.id}`,
-          type: `Etat Civil (${r.requestType || 'Demande'})`,
-          date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
-          status: r.status || 'PENDING',
-          details: `${r.feeAmount ?? 0} DH`
-        }));
+        const mappedCivilStatus = civilStatusRes.data.map((r: any) => {
+          let requestTypeFr = r.requestType || 'Demande';
+          if (r.requestType === 'death_declaration') requestTypeFr = 'Déclaration de Décès';
+          else if (r.requestType === 'birth_declaration') requestTypeFr = 'Déclaration de Naissance';
+          else if (r.requestType === 'engagement_certificate') requestTypeFr = 'Certificat de Fiançailles';
+          else if (r.requestType === 'family_booklet') requestTypeFr = 'Livret de Famille';
+
+          return {
+            id: `EC-${r.id}`,
+            type: `État Civil (${requestTypeFr})`,
+            date: r.requestTime ? new Date(r.requestTime).toLocaleDateString('fr-FR') : 'N/A',
+            status: r.status || 'PENDING',
+            details: `${r.feeAmount ?? 0} DH`
+          };
+        });
 
         const allRequests = [...mappedVehicles, ...mappedAuths, ...mappedLegalisations, ...mappedAttestations, ...mappedCivilStatus];
         // Sort newest first roughly based on ID since we don't have perfect timestamps easily comparable here

@@ -10,14 +10,14 @@ import {
 } from 'lucide-react';
 
 export const serviceNav = [
-  { id: 'DASHBOARD', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'ALL', label: 'Manage All Requests', icon: Activity },
-  { id: 'VEH', label: 'Vehicules', icon: Ambulance },
+  { id: 'DASHBOARD', label: 'Tableau de bord', icon: LayoutDashboard },
+  { id: 'ALL', label: 'Toutes les demandes', icon: Activity },
+  { id: 'VEH', label: 'Véhicules', icon: Ambulance },
   { id: 'AUT', label: 'Raccordements', icon: Zap },
-  { id: 'LEG', label: 'Legalisation', icon: FileText },
+  { id: 'LEG', label: 'Légalisation', icon: FileText },
   { id: 'ATT', label: 'Attestation', icon: Home },
-  { id: 'EC', label: 'Etat Civil', icon: Users },
-  { id: 'USERS', label: 'Users', icon: Users },
-  { id: 'ADMINS', label: 'Manage Admin', icon: Settings },
-  { id: 'FLEET', label: 'Drivers & Vehicles', icon: Ambulance }
+  { id: 'EC', label: 'État Civil', icon: Users },
+  { id: 'USERS', label: 'Citoyens', icon: Users },
+  { id: 'ADMINS', label: 'Gérer les Admins', icon: Settings },
+  { id: 'FLEET', label: 'Chauffeurs & Véhicules', icon: Ambulance }
 ];

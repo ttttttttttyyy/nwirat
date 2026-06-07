@@ -3,8 +3,8 @@ import { AlertCircle, CalendarDays, Check, CheckCircle, FileBadge2, FileCheck2, 
 import axios from 'axios';
 
 const DOCUMENTS = [
-  { fieldName: 'saleDonationSadaqaProof', title: 'Acte de vente, donation ou sadaqa', hint: 'A9d al bay3, lhiba ou sadaqa.' },
-  { fieldName: 'ownershipCertificateProof', title: 'Certificat de propriete', hint: 'Shahadat al milkia.' }
+  { fieldName: 'saleDonationSadaqaProof', title: 'Acte de vente, donation ou aumône (Sadaqa)', hint: 'Acte de vente, acte de donation (Hiba) ou acte d\'aumône.' },
+  { fieldName: 'ownershipCertificateProof', title: 'Certificat de propriété (Moulkia)', hint: 'Certificat de propriété foncière.' }
 ] as const;
 
 export default function AdministrativeAttestationRequest() {

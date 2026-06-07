@@ -15,12 +15,12 @@ export default function DashboardTopBar({ searchQuery, today, onSearchChange }: 
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm font-semibold text-slate-700 outline-none focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
-          placeholder="Search requests..."
+          placeholder="Rechercher des demandes..."
         />
       </div>
       <p className="text-center text-sm font-black capitalize text-[#064e3b]">{today}</p>
       <div className="flex items-center justify-end gap-3">
-        <button className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50" title="Settings">
+        <button className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50" title="Paramètres">
           <Settings className="h-5 w-5" />
         </button>
         <button className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50" title="Notifications">
