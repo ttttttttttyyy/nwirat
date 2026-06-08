@@ -9,20 +9,20 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import DashboardSidebar from './DashboardSidebar';
-import DashboardStatsCards from './DashboardStatsCards';
-import DashboardTopBar from './DashboardTopBar';
-import AdminsSection from './AdminsSection';
-import AttestationRequestsSection from './AttestationRequestsSection';
-import AuthorizationRequestsSection from './AuthorizationRequestsSection';
-import CivilStatusRequestsSection from './CivilStatusRequestsSection';
-import FleetSection from './FleetSection';
-import LegalisationRequestsSection from './LegalisationRequestsSection';
-import ManageAllRequestsSection from './ManageAllRequestsSection';
+import DashboardSidebar from '../ui components/DashboardSidebar';
+import DashboardStatsCards from '../ui components/DashboardStatsCards';
+import DashboardTopBar from '../ui components/DashboardTopBar';
+import AdminsSection from './manage admins/AdminsSection';
+import AttestationRequestsSection from './manage the attestations/AttestationRequestsSection';
+import AuthorizationRequestsSection from './manage the raccordments/AuthorizationRequestsSection';
+import CivilStatusRequestsSection from './manage the civil status/CivilStatusRequestsSection';
+import FleetSection from './manage drivers and vehicules/vehiculeDrivers';
+import LegalisationRequestsSection from './manage legalisation/LegalisationRequestsSection';
+import ManageAllRequestsSection from './manage all requests/ManageAllRequestsSection';
 import RequestsSection from './RequestsSection';
-import UsersSection from './UsersSection';
-import VehicleRequestsSection from './VehicleRequestsSection';
-import { serviceNav } from './dashboardConfig';
+import UsersSection from './manage users/UsersSection';
+import VehicleRequestsSection from './manage vehicule requests/VehicleRequestsSection';
+import { serviceNav } from '../ui components/dashboardConfig';
 
 export default function StaffDashboard({ onLogout }: { onLogout?: () => void }) {
   const [recentRequests, setRecentRequests] = useState<any[]>([]);

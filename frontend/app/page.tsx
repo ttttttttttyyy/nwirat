@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Login from '../components/Login';
-import MainDashboard from '../components/MainDashboard';
+import Login from '../components/ui components/Login';
+import MainDashboard from '../components/main section/home';
 
 export default function App() {
   // Global state to manage authentication status and role
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState('USER'); // 'USER', 'AGENT', 'ADMIN'
+  const [userRole, setUserRole] = useState('USER'); // 'USER', 'AGENT', 'ADMIN','DRIVER'
   const [authToken, setAuthToken] = useState('');
   const [isHydrated, setIsHydrated] = useState(false);
 

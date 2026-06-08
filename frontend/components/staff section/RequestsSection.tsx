@@ -1,5 +1,5 @@
 import { Check, Download, Eye, Plus, Search, SlidersHorizontal, Trash2, X } from 'lucide-react';
-import DashboardStatsCards from './DashboardStatsCards';
+import DashboardStatsCards from '../ui components/DashboardStatsCards';
 
 export type RequestsSectionProps = {
   filterType: string;

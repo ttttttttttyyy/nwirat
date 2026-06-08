@@ -1,5 +1,5 @@
 import { CheckCircle2, KeyRound, Search, ShieldCheck, UserCog, UserRound, XCircle } from 'lucide-react';
-import { serviceNav } from './dashboardConfig';
+import { serviceNav } from '../../ui components/dashboardConfig';
 
 type AdminsSectionProps = {
   adminEmail: string;

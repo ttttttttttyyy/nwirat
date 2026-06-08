@@ -1,4 +1,4 @@
-import RequestsSection, { RequestsSectionProps } from './RequestsSection';
+import RequestsSection, { RequestsSectionProps } from '../RequestsSection';
 
 export default function ManageAllRequestsSection(props: RequestsSectionProps) {
   return (

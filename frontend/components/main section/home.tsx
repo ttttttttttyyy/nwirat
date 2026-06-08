@@ -19,16 +19,16 @@ import {
   X,
   Zap
 } from 'lucide-react';
-import Sidebar from './Sidebar';
-import StaffDashboard from './features/StaffDashboard';
-import Settings from './features/Settings';
-import VehicleRequest from './VehicleRequest';
-import LegalisationRequest from './LegalisationRequest';
-import AdministrativeAttestationRequest from './AdministrativeAttestationRequest';
-import CivilStatusRequest from './CivilStatusRequest';
-import DriverMissions from './DriverMissions';
-import TrackRequests from './TrackRequests';
-import AuthorizationServices from './AuthorizationServices';
+import Sidebar from '../ui components/Sidebar';
+import StaffDashboard from '../ui components/StaffDashboard';
+import Settings from '../ui components/Settings';
+import VehicleRequest from './VehicleRequuest/VehicleRequest';
+import LegalisationRequest from './Legalisation/LegalisationRequest';
+import AdministrativeAttestationRequest from './AdministrativeAttestationRequest/AdministrativeAttestationRequest';
+import CivilStatusRequest from './CivilStatusRequest/CivilStatusRequest';
+import DriverMissions from './DriverMissions/DriverMissions';
+import TrackRequests from './trackRequests/TrackRequests';
+import AuthorizationServices from './Raccordments/AuthorizationServices';
 
 interface MainDashboardProps {
   onLogout: () => void;
