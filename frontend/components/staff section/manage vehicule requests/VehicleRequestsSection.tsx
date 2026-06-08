@@ -1,4 +1,4 @@
-import RequestsSection, { RequestsSectionProps } from '../RequestsSection';
+import RequestsSection, { RequestsSectionProps } from '../manage all requests/RequestsSection';
 
 export default function VehicleRequestsSection(props: RequestsSectionProps) {
   return (

@@ -19,7 +19,7 @@ import CivilStatusRequestsSection from './manage the civil status/CivilStatusReq
 import FleetSection from './manage drivers and vehicules/vehiculeDrivers';
 import LegalisationRequestsSection from './manage legalisation/LegalisationRequestsSection';
 import ManageAllRequestsSection from './manage all requests/ManageAllRequestsSection';
-import RequestsSection from './RequestsSection';
+import RequestsSection from './manage all requests/RequestsSection';
 import UsersSection from './manage users/UsersSection';
 import VehicleRequestsSection from './manage vehicule requests/VehicleRequestsSection';
 import { serviceNav } from '../ui components/dashboardConfig';
