@@ -38,7 +38,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/error").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/requests/my", "/api/requests/driver/my", "/api/authorizations/my", "/api/administrative-attestations/my", "/api/civil-status/my").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/requests/my", "/api/requests/driver/my", "/api/authorizations/my", "/api/legalisation/my", "/api/administrative-attestations/my", "/api/civil-status/my").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/requests/driver/*/complete").hasAnyAuthority("ROLE_DRIVER", "ROLE_AGENT", "ROLE_ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/requests", "/api/requests/**").hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/requests", "/api/requests/**").hasAnyAuthority("ROLE_AGENT", "ROLE_ADMIN")

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#064e3b"/>
+    </marker>
+    <style>
+      .page{fill:#ffffff}
+      .box{fill:#f8fafc;stroke:#064e3b;stroke-width:2;rx:12}
+      .head{fill:#064e3b}
+      .title{font-family:Arial, sans-serif;font-size:18px;font-weight:700;fill:#ffffff}
+      .text{font-family:Arial, sans-serif;font-size:15px;fill:#0f172a}
+      .small{font-family:Arial, sans-serif;font-size:13px;fill:#475569}
+      .line{stroke:#064e3b;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .dash{stroke-dasharray:7 6}
+      .label{font-family:Arial, sans-serif;font-size:13px;font-weight:700;fill:#064e3b}
+    </style>
+  </defs>
+
+  <rect class="page" x="0" y="0" width="1120" height="760"/>
+  <text x="560" y="38" text-anchor="middle" style="font-family:Arial, sans-serif;font-size:26px;font-weight:800;fill:#064e3b">Diagramme de Classes - Commune de Nouirat</text>
+
+  <g transform="translate(455 70)">
+    <rect class="box" width="210" height="150"/>
+    <rect class="head" width="210" height="38" rx="12"/>
+    <text class="title" x="105" y="25" text-anchor="middle">User</text>
+    <text class="text" x="18" y="64">+ id</text>
+    <text class="text" x="18" y="87">+ email</text>
+    <text class="text" x="18" y="110">+ name</text>
+    <text class="text" x="18" y="133">+ role / permissions</text>
+  </g>
+
+  <g transform="translate(50 290)">
+    <rect class="box" width="220" height="135"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Legalisation</text>
+    <text class="text" x="18" y="67">+ documentType</text>
+    <text class="text" x="18" y="92">+ appointmentDate</text>
+    <text class="text" x="18" y="117">+ status</text>
+  </g>
+
+  <g transform="translate(315 290)">
+    <rect class="box" width="220" height="135"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Raccordement</text>
+    <text class="text" x="18" y="67">+ authorizationType</text>
+    <text class="text" x="18" y="92">+ documents</text>
+    <text class="text" x="18" y="117">+ status</text>
+  </g>
+
+  <g transform="translate(585 290)">
+    <rect class="box" width="220" height="135"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Attestation Admin.</text>
+    <text class="text" x="18" y="67">+ propertyAddress</text>
+    <text class="text" x="18" y="92">+ appointmentDate</text>
+    <text class="text" x="18" y="117">+ status</text>
+  </g>
+
+  <g transform="translate(850 290)">
+    <rect class="box" width="220" height="135"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Etat Civil</text>
+    <text class="text" x="18" y="67">+ requestType</text>
+    <text class="text" x="18" y="92">+ feeAmount</text>
+    <text class="text" x="18" y="117">+ status</text>
+  </g>
+
+  <g transform="translate(425 505)">
+    <rect class="box" width="270" height="150"/>
+    <rect class="head" width="270" height="38" rx="12"/>
+    <text class="title" x="135" y="25" text-anchor="middle">AmbulanceRequest</text>
+    <text class="text" x="18" y="64">+ pickup / destination</text>
+    <text class="text" x="18" y="87">+ scheduledDate</text>
+    <text class="text" x="18" y="110">+ feeAmount</text>
+    <text class="text" x="18" y="133">+ status</text>
+  </g>
+
+  <g transform="translate(75 535)">
+    <rect class="box" width="220" height="125"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Driver</text>
+    <text class="text" x="18" y="70">+ name / email</text>
+    <text class="text" x="18" y="98">+ status</text>
+  </g>
+
+  <g transform="translate(825 535)">
+    <rect class="box" width="220" height="125"/>
+    <rect class="head" width="220" height="38" rx="12"/>
+    <text class="title" x="110" y="25" text-anchor="middle">Vehicle</text>
+    <text class="text" x="18" y="70">+ plateNumber / type</text>
+    <text class="text" x="18" y="98">+ status</text>
+  </g>
+
+  <g transform="translate(50 90)">
+    <rect class="box" width="230" height="110"/>
+    <rect class="head" width="230" height="38" rx="12"/>
+    <text class="title" x="115" y="25" text-anchor="middle">Controller Layer</text>
+    <text class="small" x="18" y="70">Auth, User, Admin</text>
+    <text class="small" x="18" y="93">Request Controllers</text>
+  </g>
+
+  <g transform="translate(840 90)">
+    <rect class="box" width="230" height="110"/>
+    <rect class="head" width="230" height="38" rx="12"/>
+    <text class="title" x="115" y="25" text-anchor="middle">Service / Repository</text>
+    <text class="small" x="18" y="70">Business services</text>
+    <text class="small" x="18" y="93">JPA repositories</text>
+  </g>
+
+  <path class="line" d="M455 145 L280 145"/>
+  <path class="line" d="M665 145 L840 145"/>
+  <path class="line" d="M530 220 L170 290"/>
+  <path class="line" d="M545 220 L425 290"/>
+  <path class="line" d="M575 220 L695 290"/>
+  <path class="line" d="M590 220 L960 290"/>
+  <path class="line" d="M560 220 L560 505"/>
+  <path class="line dash" d="M425 585 L295 595"/>
+  <path class="line" d="M695 585 L825 595"/>
+
+  <text class="label" x="395" y="242">1 to many requests</text>
+  <text class="label" x="320" y="575">assigned driver</text>
+  <text class="label" x="710" y="575">assigned vehicle</text>
+</svg>

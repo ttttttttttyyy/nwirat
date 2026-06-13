@@ -47,14 +47,14 @@ export default function AdminsSection(props: AdminsSectionProps) {
         <div className="grid gap-0 xl:grid-cols-[380px_1fr]">
           <div className="bg-[#064e3b] p-7 text-white">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#064e3b]"><UserCog className="h-7 w-7" /></div>
-            <p className="mt-6 text-xs font-black uppercase tracking-[0.22em] text-emerald-100">Contrôle d'accès</p>
-            <h1 className="mt-3 text-3xl font-black">Gérer les Admins</h1>
-            <p className="mt-3 text-sm font-semibold leading-6 text-emerald-50/80">Donnez accès au personnel par email, gérez les permissions ou supprimez les rôles d'administrateur et chauffeur.</p>
+            <p className="mt-6 text-xs font-black uppercase tracking-[0.22em] text-emerald-100">ContrÃ´le d'accÃ¨s</p>
+            <h1 className="mt-3 text-3xl font-black">GÃ©rer les Admins</h1>
+            <p className="mt-3 text-sm font-semibold leading-6 text-emerald-50/80">Donnez accÃ¨s au personnel par email, gÃ©rez les permissions ou supprimez les rÃ´les d'administrateur et chauffeur.</p>
           </div>
           <div className="grid gap-4 p-5 md:grid-cols-3 md:p-7">
             <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5"><ShieldCheck className="h-5 w-5 text-[#064e3b]" /><p className="mt-3 text-2xl font-black text-slate-950">{elevatedUsers.length}</p><p className="text-xs font-black uppercase text-slate-400">Comptes staff</p></div>
-            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5"><KeyRound className="h-5 w-5 text-[#064e3b]" /><p className="mt-3 text-2xl font-black text-slate-950">{adminPermissions.length}</p><p className="text-xs font-black uppercase text-slate-400">Droits sélectionnés</p></div>
-            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5"><UserRound className="h-5 w-5 text-[#064e3b]" /><p className="mt-3 text-2xl font-black text-slate-950">{filteredUsers.length}</p><p className="text-xs font-black uppercase text-slate-400">Utilisateurs trouvés</p></div>
+            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5"><KeyRound className="h-5 w-5 text-[#064e3b]" /><p className="mt-3 text-2xl font-black text-slate-950">{adminPermissions.length}</p><p className="text-xs font-black uppercase text-slate-400">Droits sÃ©lectionnÃ©s</p></div>
+            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5"><UserRound className="h-5 w-5 text-[#064e3b]" /><p className="mt-3 text-2xl font-black text-slate-950">{filteredUsers.length}</p><p className="text-xs font-black uppercase text-slate-400">Utilisateurs trouvÃ©s</p></div>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function AdminsSection(props: AdminsSectionProps) {
       <div className="grid gap-6 xl:grid-cols-[430px_1fr]">
         <div className="rounded-[2rem] border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-100 p-5">
-            <h2 className="text-xl font-black text-slate-950">Accorder ou modifier l'accès</h2>
+            <h2 className="text-xl font-black text-slate-950">Accorder ou modifier l'accÃ¨s</h2>
             <p className="mt-1 text-sm font-semibold text-slate-500">Saisissez l'email d'un utilisateur existant et choisissez les services visibles.</p>
           </div>
           <div className="p-5">
@@ -86,7 +86,7 @@ export default function AdminsSection(props: AdminsSectionProps) {
           <div className="flex flex-col gap-4 border-b border-slate-100 p-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h2 className="text-xl font-black text-slate-950">Personnel actuel</h2>
-              <p className="text-sm font-semibold text-slate-500">Modifiez les droits ou supprimez les rôles spéciaux.</p>
+              <p className="text-sm font-semibold text-slate-500">Modifiez les droits ou supprimez les rÃ´les spÃ©ciaux.</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
@@ -94,7 +94,7 @@ export default function AdminsSection(props: AdminsSectionProps) {
                 <input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} className="h-11 rounded-2xl border border-slate-200 pl-11 pr-4 text-sm font-semibold outline-none focus:border-emerald-300" placeholder="Rechercher du personnel..." />
               </div>
               <select value={userRoleFilter} onChange={(e) => setUserRoleFilter(e.target.value)} className="h-11 rounded-2xl border border-slate-200 px-4 text-sm font-black text-slate-600">
-                <option value="ALL">Tous les rôles</option>
+                <option value="ALL">Tous les rÃ´les</option>
                 <option value="ROLE_AGENT">Agents</option>
                 <option value="ROLE_ADMIN">Admins</option>
                 <option value="ROLE_DRIVER">Chauffeurs</option>
@@ -123,7 +123,7 @@ export default function AdminsSection(props: AdminsSectionProps) {
                 </div>
               </div>
             ))}
-            {elevatedUsers.length === 0 && <div className="rounded-3xl border border-dashed border-slate-200 p-10 text-center font-bold text-slate-400 xl:col-span-2">Aucun compte de personnel trouvé.</div>}
+            {elevatedUsers.length === 0 && <div className="rounded-3xl border border-dashed border-slate-200 p-10 text-center font-bold text-slate-400 xl:col-span-2">Aucun compte de personnel trouvÃ©.</div>}
           </div>
         </div>
       </div>

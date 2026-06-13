@@ -1,0 +1,88 @@
+classDiagram
+direction TB
+
+class User {
+  +id
+  +email
+  +name
+  +cin
+  +role
+}
+
+class AmbulanceRequest {
+  +id
+  +pickup
+  +destination
+  +date
+  +status
+}
+
+class Vehicle {
+  +id
+  +plateNumber
+  +type
+  +status
+}
+
+class Driver {
+  +id
+  +name
+  +email
+  +status
+}
+
+class LegalisationRequest {
+  +id
+  +documentType
+  +status
+}
+
+class AuthorizationRequest {
+  +id
+  +authorizationType
+  +status
+}
+
+class AdministrativeAttestationRequest {
+  +id
+  +propertyAddress
+  +status
+}
+
+class CivilStatusRequest {
+  +id
+  +requestType
+  +status
+}
+
+class ControllerLayer {
+  Auth / User / Admin
+  Request Controllers
+}
+
+class ServiceLayer {
+  AuthService
+  Request Services
+  Admin Services
+}
+
+class RepositoryLayer {
+  UserRepository
+  Request Repositories
+}
+
+User "1" --> "0..*" AmbulanceRequest
+User "1" --> "0..*" LegalisationRequest
+User "1" --> "0..*" AuthorizationRequest
+User "1" --> "0..*" AdministrativeAttestationRequest
+User "1" --> "0..*" CivilStatusRequest
+
+Vehicle "1" --> "0..*" AmbulanceRequest
+Driver "1" ..> "0..*" AmbulanceRequest
+
+ControllerLayer --> ServiceLayer
+ServiceLayer --> RepositoryLayer
+RepositoryLayer --> User
+RepositoryLayer --> AmbulanceRequest
+RepositoryLayer --> Vehicle
+RepositoryLayer --> Driver

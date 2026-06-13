@@ -147,8 +147,11 @@ export default function CivilStatusRequest() {
     }
     return !formData[document.field];
   });
-  const completedDocuments = requiredDocuments.length - missingDocuments.length;
-  const progressPercent = requiredDocuments.length ? Math.round((completedDocuments / requiredDocuments.length) * 100) : 0;
+  const logicalDocumentTotal = formData.requestType === 'death_declaration' ? 2 : requiredDocuments.length;
+  const logicalCompletedDocuments = formData.requestType === 'death_declaration'
+    ? Number(hasDeathCertificateAlternative) + Number(Boolean(formData.fullCopyOrBirthActProof))
+    : requiredDocuments.filter((document) => Boolean(formData[document.field])).length;
+  const progressPercent = logicalDocumentTotal ? Math.round((logicalCompletedDocuments / logicalDocumentTotal) * 100) : 0;
   const isReadyToSubmit = Boolean(selectedType) && hasDeathCertificateAlternative && missingDocuments.length === 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -231,7 +234,7 @@ export default function CivilStatusRequest() {
                 Choisissez le service souhaite, puis completez les informations et les documents demandes.
               </p>
               <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-5">
-                <div className="flex items-center justify-between"><span className="text-sm font-black text-indigo-50">Documents</span><span className="text-sm font-black">{completedDocuments}/{requiredDocuments.length || 1}</span></div>
+                <div className="flex items-center justify-between"><span className="text-sm font-black text-indigo-50">Documents</span><span className="text-sm font-black">{logicalCompletedDocuments}/{logicalDocumentTotal || 1}</span></div>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-white transition-all" style={{ width: `${progressPercent}%` }} /></div>
                 <p className="mt-3 text-xs font-bold text-indigo-50/75">{selectedType ? `${progressPercent}% du dossier complete` : 'Choisissez un service pour commencer'}</p>
               </div>
@@ -328,7 +331,7 @@ export default function CivilStatusRequest() {
                       <p className="mt-4 text-sm font-black uppercase tracking-widest text-gray-400">Dossier</p>
                       <h3 className="mt-1 text-2xl font-black text-[#0f172a]">{selectedType.label}</h3>
                       <div className="mt-5 space-y-3">
-                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3"><span className="text-sm font-bold text-gray-500">Pieces</span><span className="font-black text-[#4f46e5]">{completedDocuments}/{requiredDocuments.length}</span></div>
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3"><span className="text-sm font-bold text-gray-500">Pieces</span><span className="font-black text-[#4f46e5]">{logicalCompletedDocuments}/{logicalDocumentTotal}</span></div>
                         <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3"><span className="text-sm font-bold text-gray-500">Frais</span><span className="font-black text-[#4f46e5]">{selectedType.fee} DH</span></div>
                       </div>
                     </div>

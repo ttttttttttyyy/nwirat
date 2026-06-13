@@ -7,7 +7,7 @@ export default function LegalisationRequest() {
     clientName: '',
     clientPhone: '',
     cin: '',
-    documentType: 'SIGNATURE',
+    documentType: '',
     appointmentDate: '',
     documentProof: '',
     originalDocumentProof: '',
@@ -19,6 +19,10 @@ export default function LegalisationRequest() {
   const [error, setError] = useState('');
 
   const requiredDocuments = useMemo(() => {
+    if (!formData.documentType) {
+      return [];
+    }
+
     const base = [
       { fieldName: 'identityProof', inputId: 'identityProof', title: "Preuve d'identite", hint: 'Carte CIN ou passeport du demandeur.' },
       { fieldName: 'documentProof', inputId: 'documentProof', title: 'Document a legaliser', hint: 'Document qui contient la signature ou la copie.' }
@@ -37,7 +41,7 @@ export default function LegalisationRequest() {
   }, [formData.documentType]);
 
   const completedDocuments = requiredDocuments.filter((document) => Boolean((formData as any)[document.fieldName])).length;
-  const progressPercent = Math.round((completedDocuments / requiredDocuments.length) * 100);
+  const progressPercent = requiredDocuments.length ? Math.round((completedDocuments / requiredDocuments.length) * 100) : 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,8 +60,14 @@ export default function LegalisationRequest() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError('');
+
+    if (!formData.documentType) {
+      setError('Veuillez choisir le type de legalisation avant de continuer.');
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -67,7 +77,7 @@ export default function LegalisationRequest() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
       setFormData({
-        clientName: '', clientPhone: '', cin: '', documentType: 'SIGNATURE',
+        clientName: '', clientPhone: '', cin: '', documentType: '',
         appointmentDate: '', documentProof: '', originalDocumentProof: '', identityProof: ''
       });
     } catch (err: any) {
@@ -126,12 +136,14 @@ export default function LegalisationRequest() {
               <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-black text-amber-50">Documents</span>
-                  <span className="text-sm font-black text-white">{completedDocuments}/{requiredDocuments.length}</span>
+                  <span className="text-sm font-black text-white">{completedDocuments}/{requiredDocuments.length || 1}</span>
                 </div>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/15">
                   <div className="h-full rounded-full bg-white transition-all" style={{ width: `${progressPercent}%` }} />
                 </div>
-                <p className="mt-3 text-xs font-bold text-amber-50/75">{progressPercent}% du dossier complete</p>
+                <p className="mt-3 text-xs font-bold text-amber-50/75">
+                  {formData.documentType ? `${progressPercent}% du dossier complete` : 'Choisissez le type pour commencer'}
+                </p>
               </div>
 
               <div className="mt-6 space-y-3">
@@ -195,6 +207,19 @@ export default function LegalisationRequest() {
               </div>
             </div>
 
+            {!formData.documentType ? (
+              <div className="p-6 md:p-10">
+                <div className="rounded-3xl border border-dashed border-[#1e3a5f]/20 bg-slate-50 p-8 text-center">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#1e3a5f] shadow-sm">
+                    <ClipboardSignature className="h-7 w-7" />
+                  </div>
+                  <p className="text-xl font-black text-[#0f172a]">Choisissez d'abord le type de legalisation</p>
+                  <p className="mx-auto mt-2 max-w-xl text-sm font-semibold leading-6 text-gray-500">
+                    Le formulaire et les documents requis apparaitront automatiquement apres votre selection.
+                  </p>
+                </div>
+              </div>
+            ) : (
             <div className="grid gap-0 xl:grid-cols-[1fr_300px]">
               <div className="space-y-8 p-5 md:p-7">
                 <div>
@@ -289,6 +314,7 @@ export default function LegalisationRequest() {
                 </div>
               </div>
             </div>
+            )}
           </form>
         </section>
       </div>
